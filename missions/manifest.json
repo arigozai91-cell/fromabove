@@ -1,0 +1,9 @@
+{
+  "missions": [
+    "mission_01_last_stand.json",
+    "mission_02_convoy_intercept.json",
+    "mission_03_dead_wave.json",
+    "Delta.json",
+    "mission_04_base_defence.json"
+  ]
+}

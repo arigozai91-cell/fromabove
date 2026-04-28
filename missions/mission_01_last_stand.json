@@ -1,0 +1,18 @@
+{
+  "id": 1,
+  "name": "LAST STAND",
+  "description": "Protect the squad holding the compound. Survive 3 minutes.",
+  "objective": "DEFEND THE COMPOUND — KEEP FRIENDLIES ALIVE FOR 3:00",
+  "tag": "DEFEND · 3:00 TIMER",
+  "infantryCount": 20,
+  "vehicleCount": 5,
+  "friendlyInfantry": 12,
+  "friendlyVehicles": 2,
+  "friendlyApcs": 1,
+  "targetKills": null,
+  "timeLimitSec": 180,
+  "holdMode": true,
+  "zombieWaveMode": false,
+  "convoyMode": false,
+  "bonusPerFriendlySaved": 800
+}

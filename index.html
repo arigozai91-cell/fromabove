@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>AC-130 SPECTRE GUNSHIP</title>
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27&gt;&lt;text y=%27.9em%27 font-size=%2790%27&gt;%E2%9C%88%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- HUD Overlay -->
+  <div id="hud">
+    <div id="hud-top">
+      <div id="hud-left">
+        <div class="hud-label">THERMAL IMAGING SYSTEM</div>
+        <div class="hud-label" id="hud-coords">LAT: 00°00'00"N  LON: 00°00'00"E</div>
+        <div class="hud-label" id="hud-alt">ALT: 7000 FT  HDG: 270°</div>
+        <div class="hud-label" id="hud-time">TIME: 00:00 UTC</div>
+      </div>
+      <div id="hud-center-top">
+        <div id="thermal-indicator">◈ FLIR ACTIVE</div>
+        <button id="hud-menu-btn" title="Main Menu">☰ MENU</button>
+      </div>
+      <div id="hud-right">
+        <div class="hud-label" id="hud-score">PRESTIGE: 0</div>
+        <div class="hud-label" id="hud-kills">NEUTRALIZED: 0</div>
+        <div class="hud-label" id="hud-objective">OBJECTIVE: ELIMINATE HOSTILES</div>
+      </div>
+    </div>
+
+    <div id="hud-bottom">
+      <div id="weapons-panel">
+        <div class="weapon-slot" id="weapon-1">
+          <div class="weapon-key">[1]</div>
+          <div class="weapon-name">MINIGUN</div>
+          <div class="weapon-ammo" id="ammo-1">∞</div>
+          <div class="weapon-status" id="status-1">READY</div>
+        </div>
+        <div class="weapon-slot" id="weapon-2">
+          <div class="weapon-key">[2]</div>
+          <div class="weapon-name">30MM CANNON</div>
+          <div class="weapon-ammo" id="ammo-2">30</div>
+          <div class="weapon-status" id="status-2">READY</div>
+        </div>
+        <div class="weapon-slot" id="weapon-3">
+          <div class="weapon-key">[3]</div>
+          <div class="weapon-name">105MM HOWITZER</div>
+          <div class="weapon-ammo" id="ammo-3">60</div>
+          <div class="weapon-status" id="status-3">READY</div>
+        </div>
+      </div>
+      <div id="hud-bottom-center">
+        <div id="fire-indicator"></div>
+      </div>
+      <div id="hud-bottom-right">
+        <div class="hud-label">FRIENDLIES: <span id="friendly-count">0</span></div>
+        <div class="hud-label">HOSTILES: <span id="hostile-count">0</span></div>
+        <div id="warning-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Crosshair -->
+  <div id="crosshair">
+    <div id="crosshair-ring"></div>
+    <div id="crosshair-lines"></div>
+    <div id="target-box"></div>
+  </div>
+
+  <!-- Screen effects -->
+  <div id="scanlines"></div>
+  <div id="vignette"></div>
+  <div id="noise-overlay"></div>
+  <div id="mission-boot-overlay" aria-hidden="true">
+    <div class="mission-boot-base"></div>
+    <div class="mission-boot-noise"></div>
+    <div class="mission-boot-roll"></div>
+    <div class="mission-boot-slices">
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+      <div class="mission-boot-slice"></div>
+    </div>
+    <div class="mission-boot-vignette"></div>
+  </div>
+  <div id="screen-flash"></div>
+
+  <!-- ===================== MAIN MENU ===================== -->
+  <div id="main-menu">
+    <div id="menu-shell">
+      <div id="menu-content">
+        <div id="menu-hero">
+          <div class="menu-kicker">TACTICAL COMMAND</div>
+          <div id="menu-title">From Above</div>
+
+          <div id="menu-classification">Control a Gunship from above.</div>
+        </div>
+
+        <nav id="menu-nav">
+          <button class="menu-btn" id="btn-resume" style="display:none;">RESUME MISSION</button>
+          <button class="menu-btn" id="btn-return-editor" style="display:none;">RETURN TO MISSION EDITOR</button>
+          <button class="menu-btn" id="btn-play">CAMPAIGN</button>
+          <button class="menu-btn" id="btn-loadout">LOADOUT</button>
+          <button class="menu-btn" id="btn-editor">MISSION EDITOR</button>
+          <button class="menu-btn" id="btn-unit-editor">UNIT WORKBENCH</button>
+          <button class="menu-btn" id="btn-settings">SETTINGS</button>
+          <button class="menu-btn" id="btn-controls">CONTROLS</button>
+          <button class="menu-btn" id="btn-end-mission" style="display:none;">END MISSION</button>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MISSIONS SCREEN ==================== -->
+  <div id="missions-screen" style="display:none;">
+    <div id="missions-content">
+      <div class="screen-kicker">CAMPAIGN</div>
+      <div class="screen-title">SELECT MISSION</div>
+      <div class="screen-copy">Choose the next operation and deploy directly into the combat orbit. Mission progress stays available, but the layout is optimized for quick touch selection on mobile.</div>
+      <div class="screen-header-row screen-header-row-end">
+        <button class="back-btn" id="missions-back">◄ BACK</button>
+      </div>
+      <div id="missions-list">
+        <!-- Mission cards are loaded dynamically from missions/manifest.json -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== LOADOUT SCREEN ==================== -->
+  <div id="loadout-screen" style="display:none;">
+    <div id="loadout-content">
+      <div class="screen-kicker">ARMORY</div>
+      <div class="screen-title">LOADOUT</div>
+      <div class="screen-copy">Buy new weapon systems with prestige, then assign any owned weapon into your three active mission slots.</div>
+
+      <div id="loadout-header-row" class="screen-header-row">
+        <div id="loadout-prestige">TOTAL PRESTIGE: 0</div>
+        <button class="back-btn" id="loadout-back">◄ BACK</button>
+      </div>
+
+      <div id="loadout-layout">
+        <div id="loadout-shop-panel" class="loadout-panel">
+          <div class="loadout-panel-title">ACTIVE SLOTS</div>
+          <div id="loadout-slot-summary"></div>
+          <div class="loadout-panel-title">WEAPON SYSTEMS</div>
+          <div id="loadout-weapon-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SETTINGS SCREEN ==================== -->
+  <div id="settings-screen" style="display:none;">
+    <div id="settings-content">
+      <div class="screen-kicker">SYSTEM</div>
+      <div class="screen-title">SETTINGS</div>
+      <div class="screen-copy">Tune presentation and audio without leaving the command layer.</div>
+      <div class="screen-header-row screen-header-row-end">
+        <button class="back-btn" id="settings-back">◄ BACK</button>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-label">VOLUME</div>
+        <div class="settings-desc">Master volume for all in-game audio.</div>
+        <div class="volume-row">
+          <input type="range" id="volume-slider" min="0" max="100" value="50" class="volume-slider">
+          <span id="volume-value" class="volume-value">50%</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-label">MENU MUSIC</div>
+        <div class="settings-desc">Controls the music played while you are in the menu screens.</div>
+        <div class="volume-row">
+          <input type="range" id="menu-music-slider" min="0" max="100" value="45" class="volume-slider">
+          <span id="menu-music-value" class="volume-value">45%</span>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-label">GRAPHICS QUALITY</div>
+        <div class="settings-desc">Controls particle density, smoke trails, explosion effects, and building window detail.</div>
+        <div class="settings-options" id="quality-options">
+          <button class="quality-btn" data-quality="low">LOW<span class="q-sub">−75% particles, fewer windows</span></button>
+          <button class="quality-btn" data-quality="medium">MEDIUM<span class="q-sub">−50% particles, reduced windows</span></button>
+          <button class="quality-btn active" data-quality="high">HIGH<span class="q-sub">Full effects, full windows</span></button>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <div class="settings-label">CRT CORNER FOLD</div>
+        <div class="settings-desc">Deepens the curved CRT-style folded corners on the game view and HUD overlay.</div>
+        <div class="volume-row">
+          <input type="range" id="lens-distortion-slider" min="0" max="50" value="30" class="volume-slider">
+          <span id="lens-distortion-value" class="volume-value">30%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== CONTROLS SCREEN ==================== -->
+  <div id="controls-screen" style="display:none;">
+    <div id="controls-content">
+      <div class="screen-kicker">REFERENCE</div>
+      <div class="screen-title">CONTROLS</div>
+      <div class="screen-copy">Desktop and touch layouts are kept side by side so the mission flow reads clearly on both large and small screens.</div>
+      <div class="screen-header-row screen-header-row-end">
+        <button class="back-btn" id="controls-back">◄ BACK</button>
+      </div>
+
+      <div class="controls-section">
+        <div class="controls-section-title">DESKTOP</div>
+        <div class="controls-grid">
+          <div class="ctrl-row"><span class="key">MOUSE MOVE</span><span>Aim targeting reticle</span></div>
+          <div class="ctrl-row"><span class="key">LEFT CLICK / SPACEBAR</span><span>Fire selected weapon</span></div>
+          <div class="ctrl-row"><span class="key">1 / 2 / 3</span><span>Switch equipped weapon slots</span></div>
+          <div class="ctrl-row"><span class="key">SCROLL WHEEL</span><span>Zoom in / out</span></div>
+          <div class="ctrl-row"><span class="key">R</span><span>Reload</span></div>
+        </div>
+      </div>
+
+      <div class="controls-section">
+        <div class="controls-section-title">MOBILE</div>
+        <div class="controls-grid">
+          <div class="ctrl-row"><span class="key">LEFT JOYSTICK</span><span>Aim targeting reticle</span></div>
+          <div class="ctrl-row"><span class="key">FIRE BUTTON</span><span>Fire selected weapon</span></div>
+          <div class="ctrl-row"><span class="key">3 WEAPON TABS</span><span>Switch equipped weapon slots</span></div>
+          <div class="ctrl-row"><span class="key">PINCH</span><span>Zoom in / out</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== UNIT EDITOR SCREEN ==================== -->
+  <div id="unit-editor-screen" style="display:none;">
+    <div id="unit-editor-content">
+      <div class="screen-kicker">WORKSHOP</div>
+      <div class="screen-title">UNIT EDITOR</div>
+      <div class="unit-editor-copy">Tune the procedural models used for soldiers, trucks, tanks, and APCs. Changes save automatically in this browser.</div>
+      <div class="screen-header-row screen-header-row-end">
+        <button class="back-btn" id="unit-editor-back">◄ BACK</button>
+      </div>
+
+      <div id="unit-editor-layout">
+        <div id="unit-editor-sidebar" class="unit-editor-panel">
+          <div class="unit-editor-panel-title">Unit Library</div>
+          <div class="unit-editor-panel-copy">Select the unit family you want to shape. Each preset updates live in the preview and in the game.</div>
+          <div id="unit-editor-types"></div>
+        </div>
+
+        <div id="unit-editor-workbench" class="unit-editor-panel unit-editor-preview-panel">
+          <div id="unit-editor-preview-header">
+            <div>
+              <div class="unit-editor-panel-title">Workbench</div>
+              <div id="unit-editor-selection-label">UNIT PREVIEW</div>
+            </div>
+            <div id="unit-editor-preview-badge">LIVE FIT</div>
+          </div>
+          <div id="unit-editor-preview-frame">
+            <div id="unit-editor-preview"></div>
+          </div>
+          <div id="unit-editor-status">Current unit preset rotates here so you can inspect silhouette and proportions.</div>
+        </div>
+
+        <div id="unit-editor-controls" class="unit-editor-panel"></div>
+      </div>
+
+      <div id="unit-editor-actions">
+        <button class="editor-btn editor-btn-play" id="unit-editor-export">EXPORT PRESET</button>
+        <button class="editor-btn" id="unit-editor-reset-selected">RESET SELECTED</button>
+        <button class="editor-btn editor-btn-danger" id="unit-editor-reset-all">RESET ALL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== EDITOR SCREEN ==================== -->
+  <div id="editor-screen" style="display:none;">
+    <div id="editor-toolbar">
+
+      <div class="editor-row editor-row-header">
+        <div class="editor-heading-block">
+          <div class="editor-heading">MISSION EDITOR</div>
+          <div class="editor-subheading">Place units, shape the map, then save or launch the mission.</div>
+        </div>
+
+        <div class="editor-help-wrap" aria-label="Editor controls help">
+          <button class="editor-help-trigger" type="button" aria-hidden="true">?</button>
+          <div class="editor-help-panel">
+            <div class="editor-help-title">EDITOR CONTROLS</div>
+            <div class="editor-help-item">Click a tool button to switch placement mode.</div>
+            <div class="editor-help-item">Click to place units, structures, and waypoints.</div>
+            <div class="editor-help-item">Click and drag to size buildings.</div>
+            <div class="editor-help-item">Click twice to place a road start and end.</div>
+            <div class="editor-help-item">Use the middle mouse button to pan.</div>
+            <div class="editor-help-item">Use the mouse wheel to zoom.</div>
+            <div class="editor-help-item">Save or load mission files from the action bar.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ROW 1: Tool palette ── -->
+      <div class="editor-row editor-row-tools">
+
+        <div class="editor-group">
+          <span class="editor-group-label">TERRAIN</span>
+          <button class="editor-tool active" data-tool="building" title="Neutral Building">BLDG</button>
+          <button class="editor-tool et-hbld" data-tool="hostile_building" title="Hostile Building">H.BLD</button>
+          <button class="editor-tool et-fbld" data-tool="friendly_building" title="Friendly Building">F.BLD</button>
+          <button class="editor-tool" data-tool="road" title="Road">ROAD</button>
+        </div>
+
+        <div class="editor-sep"></div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">HOSTILE</span>
+          <button class="editor-tool et-hostile" data-tool="hostile_infantry" title="Hostile Infantry">H.INF</button>
+          <button class="editor-tool et-hostile" data-tool="hostile_machine_gunner" title="Hostile Machine Gunner">H.MG</button>
+          <button class="editor-tool et-hostile" data-tool="hostile_anti_tank" title="Hostile Anti-Tank">H.AT</button>
+          <button class="editor-tool et-hostile" data-tool="hostile_vehicle" title="Hostile Truck">H.TRK</button>
+          <button class="editor-tool et-hostile" data-tool="hostile_tank" title="Hostile Tank">H.TNK</button>
+          <button class="editor-tool et-hostile" data-tool="hostile_apc" title="Hostile APC">H.APC</button>
+          <button class="editor-tool et-hostile" data-tool="waypoint_hostile" title="Hostile Waypoint">H.WP</button>
+        </div>
+
+        <div class="editor-sep"></div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">FRIENDLY</span>
+          <button class="editor-tool et-friendly" data-tool="friendly_infantry" title="Friendly Infantry">F.INF</button>
+          <button class="editor-tool et-friendly" data-tool="friendly_machine_gunner" title="Friendly Machine Gunner">F.MG</button>
+          <button class="editor-tool et-friendly" data-tool="friendly_anti_tank" title="Friendly Anti-Tank">F.AT</button>
+          <button class="editor-tool et-friendly" data-tool="friendly_vehicle" title="Friendly Vehicle">F.VEH</button>
+          <button class="editor-tool et-friendly" data-tool="friendly_tank" title="Friendly Tank">F.TNK</button>
+          <button class="editor-tool et-friendly" data-tool="friendly_apc" title="Friendly APC">F.APC</button>
+          <button class="editor-tool et-friendly" data-tool="waypoint_friendly" title="Friendly Waypoint">F.WP</button>
+        </div>
+
+        <div class="editor-sep"></div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">STRUCTURES</span>
+          <button class="editor-tool et-structure" data-tool="struct_bunker" title="Friendly Bunker">BNKR</button>
+          <button class="editor-tool et-structure" data-tool="struct_bofors" title="Friendly Bofors">BFRS</button>
+          <button class="editor-tool et-structure" data-tool="struct_artillery" title="Friendly Artillery">ARTY</button>
+          <button class="editor-tool et-str-hostile" data-tool="struct_h_bunker" title="Hostile Bunker">H.BNK</button>
+          <button class="editor-tool et-str-hostile" data-tool="struct_h_bofors" title="Hostile Bofors">H.BFR</button>
+          <button class="editor-tool et-str-hostile" data-tool="struct_h_artillery" title="Hostile Artillery">H.ART</button>
+        </div>
+
+        <div class="editor-sep"></div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">EDIT</span>
+          <button class="editor-tool et-delete" data-tool="delete" title="Delete">DELETE</button>
+        </div>
+
+        <div class="editor-sep"></div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">BLD H</span>
+          <input type="number" id="editor-bheight" class="editor-num-input" value="10" min="4" max="40" step="1">
+        </div>
+
+        <div class="editor-group">
+          <span class="editor-group-label">GRID</span>
+          <button class="editor-btn editor-grid-btn active" data-grid="5">5</button>
+          <button class="editor-btn editor-grid-btn" data-grid="10">10</button>
+          <button class="editor-btn editor-grid-btn" data-grid="20">20</button>
+        </div>
+
+      </div><!-- /row-tools -->
+    </div><!-- /editor-toolbar -->
+
+    <div id="editor-save-panel" class="collapsed">
+      <div class="editor-save-panel-header">
+        <div class="editor-panel-kicker">SAVE MISSION</div>
+        <button id="editor-save-toggle" class="editor-save-toggle" type="button" aria-expanded="false" aria-controls="editor-save-panel-body">+</button>
+      </div>
+
+      <div id="editor-save-panel-body" class="editor-save-panel-body">
+        <input type="text" id="editor-mission-name" class="editor-name-input" placeholder="MISSION NAME" value="Custom Mission">
+        <div id="editor-hint" class="editor-hint"></div>
+
+        <div class="editor-save-stack">
+          <input type="text" id="editor-save-name" class="editor-name-input editor-filename-input" placeholder="filename…">
+          <div class="editor-save-actions editor-save-actions-primary">
+            <button class="editor-btn" id="editor-save">↓ SAVE</button>
+            <button class="editor-btn" id="editor-load-btn">↑ LOAD</button>
+            <input type="file" id="editor-load-input" accept=".json" style="display:none;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="editor-panel-actions">
+      <button class="editor-btn editor-btn-play" id="editor-play">▶ PLAY</button>
+      <button class="editor-btn editor-btn-danger" id="editor-clear">✖ CLEAR</button>
+      <button class="editor-btn editor-btn-exit" id="editor-exit">◄ EXIT</button>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="gameover-screen" style="display:none;">
+    <div id="gameover-content">
+      <div class="overlay-kicker">SORTIE REPORT</div>
+      <div id="gameover-title">MISSION COMPLETE</div>
+      <div id="gameover-score"></div>
+      <div id="gameover-stats"></div>
+      <button id="restart-btn">CONTINUE</button>
+    </div>
+  </div>
+
+  <!-- Mobile Controls -->
+  <div id="mobile-controls" style="display:none;">
+    <!-- Joystick -->
+    <div id="joystick-zone">
+      <div id="joystick-base">
+        <div id="joystick-thumb"></div>
+      </div>
+    </div>
+    <!-- Fire button -->
+    <div id="mobile-fire-btn">FIRE</div>
+    <!-- Weapon selector -->
+    <div id="mobile-weapon-bar">
+      <div class="mob-weapon-btn active" data-weapon="1">
+        <div class="mob-wep-num">1</div>
+        <div class="mob-wep-name">MGN</div>
+      </div>
+      <div class="mob-weapon-btn" data-weapon="2">
+        <div class="mob-wep-num">2</div>
+        <div class="mob-wep-name">30MM</div>
+      </div>
+      <div class="mob-weapon-btn" data-weapon="3">
+        <div class="mob-wep-num">3</div>
+        <div class="mob-wep-name">105MM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== BASE DEFENCE PANEL ==================== -->
+  <div id="bd-panel" style="display:none;">
+
+    <!-- Header -->
+    <div class="bd-header">
+      <div class="bd-title">◈ BASE DEFENCE</div>
+      <div class="bd-round-badge">RND <span id="bd-round">1</span></div>
+    </div>
+
+    <!-- Phase indicator -->
+    <div id="bd-phase" class="bd-phase build">BUILD PHASE</div>
+
+    <!-- Build timer bar (only shown during build phase) -->
+    <div id="bd-timer-row" class="bd-timer-row">
+      <span class="bd-label">DEPLOY TIMER</span>
+      <div class="bd-bar-wrap">
+        <div id="bd-timer-fill" class="bd-bar-fill bd-timer-fill"></div>
+      </div>
+    </div>
+
+    <div class="bd-divider"></div>
+
+    <!-- Credits -->
+    <div class="bd-row">
+      <span class="bd-label">CREDITS</span>
+      <span class="bd-credits-val">₵&thinsp;<span id="bd-credits">500</span></span>
+      <span id="bd-credit-flash" class="bd-credit-flash"></span>
+    </div>
+
+    <!-- HQ health -->
+    <div class="bd-row">
+      <span class="bd-label">HQ</span>
+      <div class="bd-bar-wrap">
+        <div id="bd-hq-bar-fill" class="bd-bar-fill bd-hq-fill"></div>
+      </div>
+      <span id="bd-hq-hp" class="bd-hq-hp">800 / 800</span>
+    </div>
+
+    <div class="bd-row">
+      <span class="bd-label">RADIUS</span>
+      <span id="bd-deploy-radius-val" class="bd-hq-hp">50</span>
+    </div>
+
+    <div class="bd-section-label">UPGRADES</div>
+    <div class="bd-btn-grid">
+      <button id="bd-upgrade-hq-btn" class="bd-unit-btn bd-upgrade-btn" type="button">
+        <span class="bd-btn-icon">HP</span>
+        <span id="bd-upgrade-hq-name" class="bd-btn-name">HQ HP LV 0/5</span>
+        <span id="bd-upgrade-hq-cost" class="bd-btn-cost">₵500</span>
+      </button>
+      <button id="bd-upgrade-radius-btn" class="bd-unit-btn bd-upgrade-btn" type="button">
+        <span class="bd-btn-icon">RD</span>
+        <span id="bd-upgrade-radius-name" class="bd-btn-name">DEPLOY LV 0/5</span>
+        <span id="bd-upgrade-radius-cost" class="bd-btn-cost">₵500</span>
+      </button>
+    </div>
+
+    <div class="bd-divider"></div>
+
+    <!-- Unit deploy buttons -->
+    <div class="bd-section-label">UNITS</div>
+    <div class="bd-btn-grid">
+      <button class="bd-unit-btn" data-type="infantry" data-cost="50">
+        <span class="bd-btn-icon">👤</span>
+        <span class="bd-btn-name">INFANTRY</span>
+        <span class="bd-btn-cost">₵50</span>
+      </button>
+      <button class="bd-unit-btn" data-type="machine_gunner" data-cost="75">
+        <span class="bd-btn-icon">MG</span>
+        <span class="bd-btn-name">M.GUNNER</span>
+        <span class="bd-btn-cost">75</span>
+      </button>
+      <button class="bd-unit-btn" data-type="anti_tank" data-cost="100">
+        <span class="bd-btn-icon">AT</span>
+        <span class="bd-btn-name">ANTI-TANK</span>
+        <span class="bd-btn-cost">100</span>
+      </button>
+      <button class="bd-unit-btn" data-type="truck" data-cost="150">
+        <span class="bd-btn-icon">🚛</span>
+        <span class="bd-btn-name">TRUCK</span>
+        <span class="bd-btn-cost">₵150</span>
+      </button>
+      <button class="bd-unit-btn" data-type="apc" data-cost="300">
+        <span class="bd-btn-icon">🛡</span>
+        <span class="bd-btn-name">APC</span>
+        <span class="bd-btn-cost">₵300</span>
+      </button>
+      <button class="bd-unit-btn" data-type="tank" data-cost="500">
+        <span class="bd-btn-icon">⚙</span>
+        <span class="bd-btn-name">TANK</span>
+        <span class="bd-btn-cost">₵500</span>
+      </button>
+    </div>
+
+    <!-- Building deploy buttons -->
+    <div class="bd-section-label">STRUCTURES</div>
+    <div class="bd-btn-grid">
+      <button class="bd-unit-btn" data-type="artillery" data-cost="3000">
+        <span class="bd-btn-icon">🎯</span>
+        <span class="bd-btn-name">ARTILLERY</span>
+        <span class="bd-btn-cost">₵3000</span>
+      </button>
+      <button class="bd-unit-btn" data-type="bunker" data-cost="1000">
+        <span class="bd-btn-icon">■</span>
+        <span class="bd-btn-name">BUNKER</span>
+        <span class="bd-btn-cost">₵1000</span>
+      </button>
+      <button class="bd-unit-btn" data-type="bofors" data-cost="1500">
+        <span class="bd-btn-icon">⬆</span>
+        <span class="bd-btn-name">BOFORS</span>
+        <span class="bd-btn-cost">₵1500</span>
+      </button>
+    </div>
+
+    <!-- Cancel placement -->
+    <button id="bd-cancel-btn" class="bd-cancel-btn" style="display:none;">✖ CANCEL PLACEMENT</button>
+
+    <!-- Notification line -->
+    <div id="bd-notify" class="bd-notify"></div>
+
+    <!-- Deploy zone hint -->
+    <div class="bd-hint">Deploy within the <span style="color:#00ff88">green circle</span> on the map.</div>
+
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div id="loading-content">
+      <div class="overlay-kicker">BOOT SEQUENCE</div>
+      <div id="loading-title">INITIALIZING SYSTEMS</div>
+      <div id="loading-bar-container"><div id="loading-bar"></div></div>
+      <div id="loading-status">Loading...</div>
+    </div>
+  </div>
+
+  <!-- Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Game modules -->
+  <script src="js/utils.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/thermal.js"></script>
+  <script src="js/terrain.js"></script>
+  <script src="js/unit-models.js"></script>
+  <script src="js/entities.js"></script>
+  <script src="js/weapons.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/hud.js"></script>
+  <script src="js/mission.js"></script>
+  <script src="js/editor.js"></script>
+  <script src="js/unitEditor.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/baseDefence.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

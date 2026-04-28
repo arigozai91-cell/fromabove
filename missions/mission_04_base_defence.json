@@ -1,0 +1,11 @@
+{
+  "id": "base_defence",
+  "name": "BASE DEFENCE",
+  "description": "Protect the HQ at the center from endless hostile waves. Deploy units and fortify. Hostiles double every round — how long can you hold?",
+  "tag": "ENDLESS · BASE DEFENCE",
+  "objective": "PROTECT HQ — NEUTRALIZE ALL HOSTILES",
+  "baseDefenceMode": true,
+  "customUnits": [],
+  "customBuildings": [],
+  "customRoads": []
+}

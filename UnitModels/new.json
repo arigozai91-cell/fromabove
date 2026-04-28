@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "exportedAt": "2026-04-09T07:58:19.959Z",
+  "units": {
+    "hostile_infantry": {
+      "color": "#d1d1d1",
+      "bodyRadius": 0.38,
+      "bodyHeight": 0.8,
+      "headRadius": 0.22,
+      "headGap": 0.28,
+      "gearWidth": 0.53,
+      "gearHeight": 0.6,
+      "gearDepth": 0.26
+    },
+    "friendly_infantry": {
+      "color": "#808080",
+      "bodyRadius": 0.38,
+      "bodyHeight": 0.8,
+      "headRadius": 0.22,
+      "headGap": 0.28,
+      "gearWidth": 0.53,
+      "gearHeight": 0.6,
+      "gearDepth": 0.26
+    },
+    "hostile_vehicle": {
+      "color": "#faf9f9",
+      "hullWidth": 2.1,
+      "hullHeight": 0.95,
+      "hullLength": 4.6,
+      "cabWidth": 1.95,
+      "cabHeight": 1.35,
+      "cabLength": 2.15,
+      "cabOffsetZ": 1.2,
+      "wheelRadius": 0.59,
+      "wheelWidth": 0.4
+    },
+    "friendly_vehicle": {
+      "color": "#faf9f9",
+      "hullWidth": 2.1,
+      "hullHeight": 0.95,
+      "hullLength": 4.6,
+      "cabWidth": 1.95,
+      "cabHeight": 1.35,
+      "cabLength": 2.15,
+      "cabOffsetZ": 1.2,
+      "wheelRadius": 0.59,
+      "wheelWidth": 0.4
+    },
+    "hostile_tank": {
+      "color": "#fafafa",
+      "hullWidth": 2.65,
+      "hullHeight": 0.9,
+      "hullLength": 5.6,
+      "turretWidth": 1.7,
+      "turretHeight": 1.1,
+      "turretLength": 2.75,
+      "turretOffsetZ": 1.65,
+      "barrelRadius": 0.21,
+      "barrelLength": 4.1,
+      "trackWidth": 0.8,
+      "trackHeight": 0.72
+    },
+    "friendly_tank": {
+      "color": "#9e9e9e",
+      "hullWidth": 2.65,
+      "hullHeight": 0.9,
+      "hullLength": 5.6,
+      "turretWidth": 1.7,
+      "turretHeight": 1.1,
+      "turretLength": 2.75,
+      "turretOffsetZ": 1.65,
+      "barrelRadius": 0.21,
+      "barrelLength": 4.1,
+      "trackWidth": 0.8,
+      "trackHeight": 0.72
+    },
+    "hostile_apc": {
+      "color": "#e0e0e0",
+      "hullWidth": 2.1,
+      "hullHeight": 0.9,
+      "hullLength": 4.8,
+      "turretWidth": 1.2,
+      "turretHeight": 0.8,
+      "turretLength": 1.45,
+      "turretOffsetZ": 0.95,
+      "barrelRadius": 0.07,
+      "barrelLength": 1.8,
+      "wheelRadius": 0.59,
+      "wheelWidth": 0.49
+    },
+    "friendly_apc": {
+      "color": "#949494",
+      "hullWidth": 2.1,
+      "hullHeight": 0.9,
+      "hullLength": 4.8,
+      "turretWidth": 1.2,
+      "turretHeight": 0.8,
+      "turretLength": 1.45,
+      "turretOffsetZ": 0.95,
+      "barrelRadius": 0.07,
+      "barrelLength": 1.8,
+      "wheelRadius": 0.59,
+      "wheelWidth": 0.49
+    }
+  }
+}

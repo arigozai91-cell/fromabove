@@ -1,0 +1,17 @@
+{
+  "id": 3,
+  "name": "DEAD WAVE",
+  "description": "Undead forces breach the perimeter. Five waves of infected soldiers converge on your position — each wave 1.5× larger than the last.",
+  "objective": "SURVIVE ALL 5 WAVES — PROTECT THE SQUAD",
+  "tag": "DEFEND · 5 WAVES · MELEE ENEMIES",
+  "infantryCount": 0,
+  "vehicleCount": 0,
+  "friendlyInfantry": 8,
+  "friendlyVehicles": 0,
+  "targetKills": null,
+  "timeLimitSec": null,
+  "holdMode": false,
+  "zombieWaveMode": true,
+  "convoyMode": false,
+  "bonusPerFriendlySaved": 500
+}

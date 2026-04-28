@@ -1,0 +1,874 @@
+{
+  "id": "DELTA",
+  "name": "DELTA SQUAD",
+  "description": "Escort Delta Squad through hostile territory to the extraction point.",
+  "objective": "ESCORT DELTA SQUAD TO EXTRACTION — REACH WAYPOINT C",
+  "tag": "ESCORT · REACH EXTRACTION POINT",
+  "targetKills": null,
+  "timeLimitSec": null,
+  "holdMode": false,
+  "zombieWaveMode": false,
+  "convoyMode": false,
+  "escortMode": true,
+  "bonusPerFriendlySaved": 500,
+  "infantryCount": 0,
+  "vehicleCount": 0,
+  "friendlyInfantry": 0,
+  "friendlyVehicles": 0,
+  "customUnits": [
+    {
+      "type": "hostile_tank",
+      "x": 20,
+      "z": 35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 30,
+      "z": 35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 25,
+      "z": 30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 30,
+      "z": 30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 25,
+      "z": 35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -10,
+      "z": 5
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -10,
+      "z": 10
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -15,
+      "z": 5
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -5,
+      "z": 10
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -70,
+      "z": 40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -65,
+      "z": 30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -75,
+      "z": 30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -75,
+      "z": 35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": -70,
+      "z": 35
+    },
+    {
+      "type": "hostile_tank",
+      "x": 100,
+      "z": 85
+    },
+    {
+      "type": "hostile_tank",
+      "x": 135,
+      "z": 45
+    },
+    {
+      "type": "hostile_tank",
+      "x": 95,
+      "z": 5
+    },
+    {
+      "type": "hostile_tank",
+      "x": 65,
+      "z": 50
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 105,
+      "z": 85
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 105,
+      "z": 80
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 75,
+      "z": 55
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 70,
+      "z": 50
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 140,
+      "z": 55
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 135,
+      "z": 50
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 100,
+      "z": 10
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 105,
+      "z": 5
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 10,
+      "z": -40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 20,
+      "z": -40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 15,
+      "z": -40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 15,
+      "z": -35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 20,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 10,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 10,
+      "z": -35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 15,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 20,
+      "z": -35
+    },
+    {
+      "type": "hostile_vehicle",
+      "x": 25,
+      "z": -35
+    },
+    {
+      "type": "hostile_vehicle",
+      "x": 35,
+      "z": -35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 40,
+      "z": -25
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 40,
+      "z": -40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 40,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 40,
+      "z": -35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 45,
+      "z": -35
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 45,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 45,
+      "z": -30
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 45,
+      "z": -40
+    },
+    {
+      "type": "hostile_infantry",
+      "x": 50,
+      "z": -25
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -170,
+      "z": 170
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -165,
+      "z": 175
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -160,
+      "z": 180
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -155,
+      "z": 185
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -175,
+      "z": 165
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -160,
+      "z": 185
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -165,
+      "z": 180
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -170,
+      "z": 175
+    },
+    {
+      "type": "friendly_infantry",
+      "x": -175,
+      "z": 170
+    }
+  ],
+  "customBuildings": [
+    {
+      "x": 15,
+      "z": -15,
+      "w": 15,
+      "d": 15,
+      "h": 20,
+      "groundY": 0
+    },
+    {
+      "x": 15,
+      "z": -15,
+      "w": 15,
+      "d": 15,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": 35,
+      "z": -15,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 15,
+      "z": 15,
+      "w": 15,
+      "d": 15,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": -15,
+      "z": -15,
+      "w": 15,
+      "d": 15,
+      "h": 35,
+      "groundY": 0
+    },
+    {
+      "x": -30,
+      "z": 20,
+      "w": 30,
+      "d": 20,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": -75,
+      "z": 15,
+      "w": 15,
+      "d": 15,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": 30,
+      "z": 15,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 77.5,
+      "z": 10,
+      "w": 25,
+      "d": 10,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 70,
+      "z": 20,
+      "w": 10,
+      "d": 20,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 122.5,
+      "z": 10,
+      "w": 25,
+      "d": 10,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 130,
+      "z": 17.5,
+      "w": 10,
+      "d": 25,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 100,
+      "z": 45,
+      "w": 20,
+      "d": 30,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 122.5,
+      "z": 80,
+      "w": 25,
+      "d": 10,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 130,
+      "z": 70,
+      "w": 10,
+      "d": 20,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 77.5,
+      "z": 80,
+      "w": 25,
+      "d": 10,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 70,
+      "z": 70,
+      "w": 10,
+      "d": 20,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 22.5,
+      "z": 62.5,
+      "w": 15,
+      "d": 15,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": 45,
+      "z": 65,
+      "w": 10,
+      "d": 10,
+      "h": 25,
+      "groundY": 0
+    },
+    {
+      "x": -15,
+      "z": 50,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": -35,
+      "z": 50,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": -55,
+      "z": 50,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": -35,
+      "z": 67.5,
+      "w": 50,
+      "d": 15,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 52.5,
+      "z": 22.5,
+      "w": 15,
+      "d": 25,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 62.5,
+      "z": -15,
+      "w": 15,
+      "d": 10,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 105,
+      "z": -20,
+      "w": 15,
+      "d": 15,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 77.5,
+      "z": -50,
+      "w": 15,
+      "d": 30,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 107.5,
+      "z": -50,
+      "w": 15,
+      "d": 20,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": 55,
+      "z": -60,
+      "w": 15,
+      "d": 15,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": -37.5,
+      "z": -27.5,
+      "w": 15,
+      "d": 35,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": -57.5,
+      "z": -27.5,
+      "w": 15,
+      "d": 35,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": -77.5,
+      "z": -27.5,
+      "w": 15,
+      "d": 35,
+      "h": 10,
+      "groundY": 0
+    },
+    {
+      "x": -45,
+      "z": -77.5,
+      "w": 70,
+      "d": 25,
+      "h": 8,
+      "groundY": 0
+    },
+    {
+      "x": -45,
+      "z": -132.5,
+      "w": 70,
+      "d": 25,
+      "h": 8,
+      "groundY": 0
+    },
+    {
+      "x": -92.5,
+      "z": -102.5,
+      "w": 15,
+      "d": 45,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 15,
+      "z": 85,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 25,
+      "z": 112.5,
+      "w": 20,
+      "d": 25,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 75,
+      "z": -75,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    },
+    {
+      "x": 55,
+      "z": -75,
+      "w": 15,
+      "d": 15,
+      "h": 15,
+      "groundY": 0
+    }
+  ],
+  "customRoads": [
+    {
+      "x1": 0,
+      "z1": 200,
+      "x2": 0,
+      "z2": -200,
+      "width": 6
+    },
+    {
+      "x1": -200,
+      "z1": 0,
+      "x2": 200,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": 40,
+      "x2": -60,
+      "z2": 40,
+      "width": 6
+    },
+    {
+      "x1": -60,
+      "z1": 40,
+      "x2": -60,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 75,
+      "z1": 45,
+      "x2": 0,
+      "z2": 45,
+      "width": 6
+    },
+    {
+      "x1": 75,
+      "z1": 45,
+      "x2": 85,
+      "z2": 45,
+      "width": 6
+    },
+    {
+      "x1": 85,
+      "z1": 45,
+      "x2": 85,
+      "z2": 20,
+      "width": 6
+    },
+    {
+      "x1": 85,
+      "z1": 20,
+      "x2": 100,
+      "z2": 20,
+      "width": 6
+    },
+    {
+      "x1": 100,
+      "z1": 20,
+      "x2": 100,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 100,
+      "z1": 20,
+      "x2": 120,
+      "z2": 20,
+      "width": 6
+    },
+    {
+      "x1": 120,
+      "z1": 20,
+      "x2": 120,
+      "z2": 70,
+      "width": 6
+    },
+    {
+      "x1": 120,
+      "z1": 70,
+      "x2": 80,
+      "z2": 70,
+      "width": 6
+    },
+    {
+      "x1": 80,
+      "z1": 70,
+      "x2": 80,
+      "z2": 45,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": -80,
+      "x2": 105,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 90,
+      "z1": -15,
+      "x2": 90,
+      "z2": -70,
+      "width": 6
+    },
+    {
+      "x1": 90,
+      "z1": -35,
+      "x2": 125,
+      "z2": -35,
+      "width": 6
+    },
+    {
+      "x1": 125,
+      "z1": -35,
+      "x2": 125,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": -85,
+      "z1": -55,
+      "x2": 0,
+      "z2": -55,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": -105,
+      "x2": -80,
+      "z2": -105,
+      "width": 6
+    },
+    {
+      "x1": -75,
+      "z1": -95,
+      "x2": -75,
+      "z2": -105,
+      "width": 6
+    },
+    {
+      "x1": -60,
+      "z1": -95,
+      "x2": -60,
+      "z2": -105,
+      "width": 6
+    },
+    {
+      "x1": -45,
+      "z1": -95,
+      "x2": -45,
+      "z2": -105,
+      "width": 6
+    },
+    {
+      "x1": -75,
+      "z1": -105,
+      "x2": -75,
+      "z2": -115,
+      "width": 6
+    },
+    {
+      "x1": -60,
+      "z1": -105,
+      "x2": -60,
+      "z2": -115,
+      "width": 6
+    },
+    {
+      "x1": -45,
+      "z1": -105,
+      "x2": -45,
+      "z2": -115,
+      "width": 6
+    },
+    {
+      "x1": 55,
+      "z1": 45,
+      "x2": 55,
+      "z2": 80,
+      "width": 6
+    },
+    {
+      "x1": 30,
+      "z1": 80,
+      "x2": 55,
+      "z2": 80,
+      "width": 6
+    },
+    {
+      "x1": 30,
+      "z1": 80,
+      "x2": 30,
+      "z2": 95,
+      "width": 6
+    },
+    {
+      "x1": 30,
+      "z1": 95,
+      "x2": 55,
+      "z2": 95,
+      "width": 6
+    },
+    {
+      "x1": 55,
+      "z1": 95,
+      "x2": 55,
+      "z2": 135,
+      "width": 6
+    },
+    {
+      "x1": 55,
+      "z1": 135,
+      "x2": 0,
+      "z2": 135,
+      "width": 6
+    },
+    {
+      "x1": 90,
+      "z1": -65,
+      "x2": 90,
+      "z2": -90,
+      "width": 6
+    },
+    {
+      "x1": 90,
+      "z1": -90,
+      "x2": 0,
+      "z2": -90,
+      "width": 6
+    },
+    {
+      "x1": -85,
+      "z1": -55,
+      "x2": -95,
+      "z2": -55,
+      "width": 6
+    },
+    {
+      "x1": -95,
+      "z1": -55,
+      "x2": -95,
+      "z2": 0,
+      "width": 6
+    }
+  ],
+  "hostileWaypoints": [],
+  "friendlyWaypoints": [
+    {
+      "x": 0,
+      "z": 105,
+      "letter": "A"
+    },
+    {
+      "x": 0,
+      "z": -105,
+      "letter": "B"
+    },
+    {
+      "x": -75,
+      "z": -105,
+      "letter": "C"
+    }
+  ]
+}

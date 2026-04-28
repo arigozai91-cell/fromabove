@@ -1,0 +1,95 @@
+AC130 Deployment Guide
+
+1. Prepare the project
+   - Make sure these folders exist in the project root:
+     - js/
+     - css/
+     - missions/
+     - StartVoice/
+     - RandomVoice/
+     - UnitModels/
+   - Check that index.html is in the project root.
+   - Check that mission voice MP3 files are inside StartVoice/.
+   - Check that random radio MP3 files are inside RandomVoice/.
+
+2. Test locally before deployment
+   - Open a terminal in the project folder.
+   - Start a local static server:
+     - Option A: npx serve .
+     - Option B: python -m http.server 8080
+   - Open the local URL shown in the terminal.
+   - Test these before deploying:
+     - Main menu loads
+     - Missions list appears
+     - A mission can start
+     - Start voice plays at mission start
+     - Random voice starts after 20 seconds
+     - Audio works after clicking Play
+     - Mission editor opens
+     - Mobile controls appear on a phone or narrow screen
+
+3. Create a Vercel account
+   - Go to https://vercel.com
+   - Sign in with GitHub, GitLab, or email.
+
+4. Put the project on GitHub
+   - Create a new repository on GitHub.
+   - Upload this whole AC130 folder.
+   - Make sure all audio folders and mission JSON files are committed.
+
+5. Deploy to Vercel
+   - In Vercel, click Add New... then Project.
+   - Import the GitHub repository.
+   - Framework Preset: choose Other.
+   - Root Directory: use the AC130 project folder.
+   - Build Command: leave empty.
+   - Output Directory: leave empty.
+   - Install Command: leave empty.
+   - Deploy the project.
+
+6. Test the live Vercel site
+   - Open the deployed URL.
+   - Click Play to make sure audio permission is granted by the browser.
+   - Start each mission and confirm:
+     - Mission loads correctly
+     - Start voice file plays
+     - Random voice files play during the mission
+     - Weapons fire correctly
+     - Mission editor still works
+
+7. If audio does not play on Vercel
+   - Make sure audio files are included in the Git repository.
+   - Check exact filename case:
+     - LastStand.mp3 is different from laststand.mp3 on Linux hosting.
+   - Make sure the user clicked or tapped before expecting sound.
+   - Open browser DevTools and check the Network tab for missing MP3 files.
+
+8. If missions do not load
+   - Check that missions/manifest.json exists.
+   - Check that all files listed in missions/manifest.json are present.
+   - Open browser DevTools and check for 404 errors.
+
+9. Recommended improvement after deployment
+   - Consider downloading and hosting three.min.js locally instead of using the CDN.
+   - This removes one external dependency and makes loading more reliable.
+
+10. Quick redeploy workflow
+   - Change files locally.
+   - Commit and push to GitHub.
+   - Vercel will redeploy automatically.
+
+11. Rollback if something breaks
+   - Open the project in Vercel.
+   - Go to Deployments.
+   - Open an older successful deployment.
+   - Promote or redeploy that version.
+
+12. Final launch checklist
+   - Home page loads
+   - No 404 errors in browser network panel
+   - Audio starts after interaction
+   - Mission voices work
+   - Random voices work
+   - Tanks, weapons, and mission logic behave correctly
+   - Mobile UI is usable
+   - Performance is acceptable on another device, not only your own PC

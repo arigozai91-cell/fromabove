@@ -1,0 +1,626 @@
+{
+  "id": "custom",
+  "name": "Custom Mission",
+  "description": "Custom mission created in the editor.",
+  "objective": "HOLD POSITION",
+  "tag": "DEFEND",
+  "targetKills": null,
+  "timeLimitSec": null,
+  "holdMode": false,
+  "zombieWaveMode": false,
+  "convoyMode": false,
+  "escortMode": false,
+  "bonusPerFriendlySaved": 500,
+  "infantryCount": 0,
+  "vehicleCount": 0,
+  "friendlyInfantry": 0,
+  "friendlyVehicles": 0,
+  "customUnits": [],
+  "customBuildings": [
+    {
+      "x": 25,
+      "z": -25,
+      "w": 30,
+      "d": 30,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -25,
+      "z": -25,
+      "w": 30,
+      "d": 30,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 25,
+      "z": 25,
+      "w": 30,
+      "d": 30,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -25,
+      "z": 25,
+      "w": 30,
+      "d": 30,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 80,
+      "z": -30,
+      "w": 20,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 110,
+      "z": -30,
+      "w": 20,
+      "d": 20,
+      "h": 25,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 110,
+      "z": -70,
+      "w": 20,
+      "d": 20,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 140,
+      "z": -70,
+      "w": 20,
+      "d": 20,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 80,
+      "z": -65,
+      "w": 20,
+      "d": 10,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 140,
+      "z": -25,
+      "w": 20,
+      "d": 30,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 80,
+      "z": 30,
+      "w": 30,
+      "d": 30,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 20,
+      "z": -70,
+      "w": 20,
+      "d": 20,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 10,
+      "z": -95,
+      "w": 10,
+      "d": 30,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -20,
+      "z": -90,
+      "w": 20,
+      "d": 20,
+      "h": 15,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -50,
+      "z": -90,
+      "w": 20,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -80,
+      "z": -90,
+      "w": 20,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -80,
+      "z": -60,
+      "w": 20,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -80,
+      "z": -30,
+      "w": 20,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -75,
+      "z": 20,
+      "w": 30,
+      "d": 20,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 130,
+      "z": 45,
+      "w": 20,
+      "d": 70,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 20,
+      "z": 80,
+      "w": 30,
+      "d": 30,
+      "h": 10,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -135,
+      "z": 145,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -115,
+      "z": 145,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -95,
+      "z": 145,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -75,
+      "z": 140,
+      "w": 10,
+      "d": 20,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -135,
+      "z": 170,
+      "w": 10,
+      "d": 20,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -115,
+      "z": 165,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -95,
+      "z": 167.5,
+      "w": 10,
+      "d": 15,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -75,
+      "z": 167.5,
+      "w": 10,
+      "d": 15,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -135,
+      "z": 132.5,
+      "w": 10,
+      "d": 5,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -115,
+      "z": 135,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -95,
+      "z": 132.5,
+      "w": 10,
+      "d": 5,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -75,
+      "z": 110,
+      "w": 10,
+      "d": 20,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -90,
+      "z": 115,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -105,
+      "z": 112.5,
+      "w": 10,
+      "d": 15,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": -125,
+      "z": 115,
+      "w": 10,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 120,
+      "z": -180,
+      "w": 20,
+      "d": 30,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    },
+    {
+      "x": 147.5,
+      "z": -175,
+      "w": 15,
+      "d": 10,
+      "h": 5,
+      "groundY": 0,
+      "faction": "building"
+    }
+  ],
+  "customRoads": [
+    {
+      "x1": -200,
+      "z1": 0,
+      "x2": 205,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": -200,
+      "x2": 0,
+      "z2": 200,
+      "width": 6
+    },
+    {
+      "x1": -50,
+      "z1": 0,
+      "x2": -50,
+      "z2": -50,
+      "width": 6
+    },
+    {
+      "x1": -50,
+      "z1": -50,
+      "x2": 50,
+      "z2": -50,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": -50,
+      "x2": 50,
+      "z2": 50,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 50,
+      "x2": -50,
+      "z2": 50,
+      "width": 6
+    },
+    {
+      "x1": -50,
+      "z1": 50,
+      "x2": -50,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": -50,
+      "x2": 160,
+      "z2": -50,
+      "width": 6
+    },
+    {
+      "x1": 160,
+      "z1": -50,
+      "x2": 160,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 50,
+      "x2": 170,
+      "z2": 150,
+      "width": 6
+    },
+    {
+      "x1": 170,
+      "z1": 150,
+      "x2": 200,
+      "z2": 150,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": -50,
+      "x2": 0,
+      "z2": -150,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": -110,
+      "x2": -100,
+      "z2": -110,
+      "width": 6
+    },
+    {
+      "x1": -100,
+      "z1": -110,
+      "x2": -100,
+      "z2": 0,
+      "width": 6
+    },
+    {
+      "x1": 110,
+      "z1": 0,
+      "x2": 110,
+      "z2": 100,
+      "width": 6
+    },
+    {
+      "x1": 110,
+      "z1": 100,
+      "x2": 0,
+      "z2": 170,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 140,
+      "x2": 50,
+      "z2": 100,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 100,
+      "x2": 20,
+      "z2": 100,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 100,
+      "x2": 80,
+      "z2": 100,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 100,
+      "x2": 50,
+      "z2": 70,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 80,
+      "x2": 70,
+      "z2": 80,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 70,
+      "x2": 50,
+      "z2": 60,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 60,
+      "x2": 0,
+      "z2": 60,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 130,
+      "x2": 20,
+      "z2": 130,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 120,
+      "x2": 20,
+      "z2": 120,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": 110,
+      "x2": 20,
+      "z2": 110,
+      "width": 6
+    },
+    {
+      "x1": 0,
+      "z1": 160,
+      "x2": -30,
+      "z2": 160,
+      "width": 6
+    },
+    {
+      "x1": -30,
+      "z1": 160,
+      "x2": -40,
+      "z2": 155,
+      "width": 6
+    },
+    {
+      "x1": -40,
+      "z1": 155,
+      "x2": -200,
+      "z2": 155,
+      "width": 6
+    },
+    {
+      "x1": -65,
+      "z1": 155,
+      "x2": -65,
+      "z2": 110,
+      "width": 6
+    },
+    {
+      "x1": -65,
+      "z1": 125,
+      "x2": -155,
+      "z2": 125,
+      "width": 6
+    },
+    {
+      "x1": -155,
+      "z1": 125,
+      "x2": -185,
+      "z2": 95,
+      "width": 6
+    },
+    {
+      "x1": -185,
+      "z1": 95,
+      "x2": -210,
+      "z2": 95,
+      "width": 6
+    },
+    {
+      "x1": 50,
+      "z1": -50,
+      "x2": 95,
+      "z2": -150,
+      "width": 6
+    },
+    {
+      "x1": 95,
+      "z1": -150,
+      "x2": 200,
+      "z2": -165,
+      "width": 6
+    },
+    {
+      "x1": 135,
+      "z1": -155,
+      "x2": 135,
+      "z2": -185,
+      "width": 6
+    },
+    {
+      "x1": 135,
+      "z1": -185,
+      "x2": 165,
+      "z2": -185,
+      "width": 6
+    }
+  ],
+  "hostileWaypoints": [],
+  "friendlyWaypoints": []
+}

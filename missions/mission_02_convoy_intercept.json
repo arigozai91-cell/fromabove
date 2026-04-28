@@ -1,0 +1,17 @@
+{
+  "id": 2,
+  "name": "CONVOY INTERCEPT",
+  "description": "Enemy convoy moving through sector. Destroy all vehicles and escort before they reach the extraction zone.",
+  "objective": "DESTROY THE CONVOY — ELIMINATE 20+ ENEMIES",
+  "tag": "ASSAULT · ELIMINATE 20+ ENEMIES",
+  "infantryCount": 14,
+  "vehicleCount": 6,
+  "friendlyInfantry": 0,
+  "friendlyVehicles": 0,
+  "targetKills": 20,
+  "timeLimitSec": null,
+  "holdMode": false,
+  "zombieWaveMode": false,
+  "convoyMode": true,
+  "bonusPerFriendlySaved": 0
+}
