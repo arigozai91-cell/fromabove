@@ -7,12 +7,14 @@ const AudioSystem = (() => {
   let ctx = null;
   let masterGain = null;
   let menuMusicGain = null;
+  let explosionGain = null;
   let initialized = false;
   let missileLockMode = 'off';
   let missileLockInterval = null;
   let activeMissionVoiceCount = 0;
   let masterVolume = 0.5;
   let menuMusicVolume = 0.45;
+  let explosionVolume = 0.7;
   let menuMusicEnabled = false;
   let menuMusicAudio = null;
   let menuMusicSource = null;
@@ -23,6 +25,7 @@ const AudioSystem = (() => {
   const IMAGE_ROOT = 'image';
   const MASTER_VOLUME_STORAGE_KEY = 'ac130_master_volume';
   const MENU_MUSIC_VOLUME_STORAGE_KEY = 'ac130_menu_music_volume';
+  const EXPLOSION_VOLUME_STORAGE_KEY = 'ac130_explosion_volume';
 
   function soundPath(relativePath) {
     return `${SOUND_ROOT}/${relativePath}`;
@@ -134,6 +137,7 @@ const AudioSystem = (() => {
     try {
       masterVolume = readStoredVolume(MASTER_VOLUME_STORAGE_KEY, 0.5);
       menuMusicVolume = readStoredVolume(MENU_MUSIC_VOLUME_STORAGE_KEY, 0.45);
+      explosionVolume = readStoredVolume(EXPLOSION_VOLUME_STORAGE_KEY, 0.7);
       ctx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = ctx.createGain();
       masterGain.gain.value = masterVolume;
@@ -141,6 +145,9 @@ const AudioSystem = (() => {
       menuMusicGain = ctx.createGain();
       menuMusicGain.gain.value = 0;
       menuMusicGain.connect(masterGain);
+      explosionGain = ctx.createGain();
+      explosionGain.gain.value = explosionVolume;
+      explosionGain.connect(masterGain);
       initialized = true;
     } catch (e) {
       console.warn('Web Audio not supported:', e);
@@ -637,7 +644,7 @@ const AudioSystem = (() => {
     ng.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
     noise.connect(bpf);
     bpf.connect(ng);
-    ng.connect(masterGain);
+    ng.connect(explosionGain || masterGain);
     noise.start();
     noise.stop(ctx.currentTime + dur + 0.05);
   }
@@ -1095,6 +1102,16 @@ const AudioSystem = (() => {
     return menuMusicVolume;
   }
 
+  function setExplosionVolume(v) {
+    explosionVolume = Utils.clamp(v, 0, 1);
+    writeStoredVolume(EXPLOSION_VOLUME_STORAGE_KEY, explosionVolume);
+    if (explosionGain) explosionGain.gain.value = explosionVolume;
+  }
+
+  function getExplosionVolume() {
+    return explosionVolume;
+  }
+
   return {
     init, resume,
     playMinigun, play25mm, play20mm, play20mmFire, play20mmImpact, play30mm, play40mm, playTankFire, play105mm, playRifle,
@@ -1103,7 +1120,7 @@ const AudioSystem = (() => {
     playMissionStartVoice, playRandomMissionVoice,
     playEnemyHitVoice, playFriendlyHitVoice, playTankHitVoice, playMissionSuccessVoice, playMissionFailureVoice,
     stopMissionVoicePlayback, pauseMissionVoicePlayback, resumeMissionVoicePlayback, hasActiveMissionVoice,
-    enableMenuMusic, disableMenuMusic, setMenuMusicVolume, getMenuMusicVolume,
+    enableMenuMusic, disableMenuMusic, setMenuMusicVolume, getMenuMusicVolume, setExplosionVolume, getExplosionVolume,
     setVolume, getVolume
   };
 })();

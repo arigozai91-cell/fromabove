@@ -562,6 +562,8 @@ const MenuSystem = (() => {
     // Volume slider
     const volSlider = document.getElementById('volume-slider');
     const volValue  = document.getElementById('volume-value');
+    const explosionSlider = document.getElementById('explosion-volume-slider');
+    const explosionValue  = document.getElementById('explosion-volume-value');
     const musicSlider = document.getElementById('menu-music-slider');
     const musicValue  = document.getElementById('menu-music-value');
     const lensSlider = document.getElementById('lens-distortion-slider');
@@ -576,6 +578,18 @@ const MenuSystem = (() => {
         const pct = parseInt(volSlider.value, 10);
         volValue.textContent = pct + '%';
         AudioSystem.setVolume(pct / 100);
+      });
+    }
+    if (explosionSlider && explosionValue && AudioSystem.getExplosionVolume) {
+      const pct = Math.round(AudioSystem.getExplosionVolume() * 100);
+      explosionSlider.value = String(pct);
+      explosionValue.textContent = pct + '%';
+    }
+    if (explosionSlider) {
+      explosionSlider.addEventListener('input', () => {
+        const pct = parseInt(explosionSlider.value, 10);
+        explosionValue.textContent = pct + '%';
+        AudioSystem.setExplosionVolume(pct / 100);
       });
     }
     if (musicSlider && musicValue && AudioSystem.getMenuMusicVolume) {

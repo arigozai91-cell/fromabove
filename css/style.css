@@ -61,6 +61,11 @@ html, body {
   cursor: default;
 }
 
+body.game-active,
+body.game-active * {
+  cursor: none !important;
+}
+
 body.game-active::before,
 body.game-active::after {
   content: '';
