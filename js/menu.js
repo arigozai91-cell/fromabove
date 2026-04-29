@@ -7,6 +7,7 @@ const MenuSystem = (() => {
 
   // ---- Quality setting ----
   let quality = 'high';
+  let qualityLoaded = false;
   const qualityListeners = [];
   const QUALITY_PROFILES = {
     low: {
@@ -89,7 +90,36 @@ const MenuSystem = (() => {
       && window.matchMedia('(pointer: coarse)').matches;
   }
 
+  function getRecommendedInitialQuality() {
+    const width = typeof window !== 'undefined' ? window.innerWidth || 0 : 0;
+    const height = typeof window !== 'undefined' ? window.innerHeight || 0 : 0;
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
+    if (isCoarsePointerDevice()) {
+      return dpr > 1 || (width * height) > 700000 ? 'low' : 'medium';
+    }
+
+    return dpr > 1 || (width * height) > 1200000 ? 'medium' : 'high';
+  }
+
+  function ensureQualityLoaded() {
+    if (qualityLoaded) return;
+    qualityLoaded = true;
+
+    try {
+      const saved = localStorage.getItem('ac130_quality');
+      if (saved && QUALITY_PROFILES[saved] !== undefined) {
+        quality = saved;
+        return;
+      }
+    } catch (_) {}
+
+    quality = getRecommendedInitialQuality();
+    try { localStorage.setItem('ac130_quality', quality); } catch (_) {}
+  }
+
   function getQualityProfile() {
+    ensureQualityLoaded();
     const baseProfile = QUALITY_PROFILES[quality] || QUALITY_PROFILES.high;
     if (!isCoarsePointerDevice()) return baseProfile;
     const mobileOverride = MOBILE_QUALITY_OVERRIDES[quality];
@@ -100,7 +130,10 @@ const MenuSystem = (() => {
     return getQualityProfile().particleMultiplier;
   }
 
-  function getQuality() { return quality; }
+  function getQuality() {
+    ensureQualityLoaded();
+    return quality;
+  }
 
   function onQualityChange(cb) {
     if (typeof cb !== 'function') return () => {};
@@ -113,6 +146,7 @@ const MenuSystem = (() => {
 
   function setQuality(q) {
     if (QUALITY_PROFILES[q] === undefined || q === quality) return;
+    qualityLoaded = true;
     quality = q;
     try { localStorage.setItem('ac130_quality', q); } catch(_) {}
     document.querySelectorAll('.quality-btn').forEach(btn => {
@@ -570,11 +604,7 @@ const MenuSystem = (() => {
     _onEndMission = onEndMission;
     _onReturnToEditor = onReturnToEditor;
 
-    // Restore saved quality
-    try {
-      const saved = localStorage.getItem('ac130_quality');
-      if (saved && QUALITY_PROFILES[saved] !== undefined) quality = saved;
-    } catch(_) {}
+    ensureQualityLoaded();
 
     // Apply saved quality to buttons
     document.querySelectorAll('.quality-btn').forEach(btn => {

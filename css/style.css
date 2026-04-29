@@ -1276,7 +1276,7 @@ body.mission-booting #mission-boot-overlay {
   background:
     radial-gradient(circle at 76% 18%, rgba(209, 197, 170, 0.12), rgba(209, 197, 170, 0) 20%),
     linear-gradient(135deg, rgba(10,10,9,0.96) 0%, rgba(20,19,16,0.94) 48%, rgba(10,10,9,0.98) 100%);
-  display: flex;
+   display: none;
   align-items: center;
   justify-content: center;
   z-index: 200;
