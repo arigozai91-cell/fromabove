@@ -38,6 +38,13 @@ const Game = (() => {
   let nextMissionIndex = null;
   let missionOutcomePending = false;
 
+  const DEFAULT_QUALITY_PROFILE = {
+    renderScale: 1.0,
+    maxPixelRatio: 1.5,
+    thermalScale: 1.0,
+    tiltShiftMultiplier: 1.0
+  };
+
   // Mouse world aim
   let mouseX = 0, mouseY = 0;  // normalized device coords
   let aimWorldX = 0, aimWorldZ = 0;
@@ -89,6 +96,42 @@ const Game = (() => {
     }
   }
 
+  function getActiveQualityProfile() {
+    if (typeof MenuSystem !== 'undefined' && MenuSystem.getQualityProfile) {
+      return MenuSystem.getQualityProfile();
+    }
+    return DEFAULT_QUALITY_PROFILE;
+  }
+
+  function getThermalBufferSize(width = window.innerWidth, height = window.innerHeight) {
+    const profile = getActiveQualityProfile();
+    const thermalScale = Utils.clamp(profile.thermalScale !== undefined ? profile.thermalScale : 1, 0.25, 1.0);
+    return {
+      width: Math.max(1, Math.round(width * thermalScale)),
+      height: Math.max(1, Math.round(height * thermalScale))
+    };
+  }
+
+  function applyQualitySettings() {
+    if (!renderer) return;
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const profile = getActiveQualityProfile();
+    const renderScale = Utils.clamp(profile.renderScale !== undefined ? profile.renderScale : 1, 0.25, 1.0);
+    const maxPixelRatio = Math.max(0.5, profile.maxPixelRatio !== undefined ? profile.maxPixelRatio : 1);
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const effectivePixelRatio = Math.max(0.5, Math.min(devicePixelRatio, maxPixelRatio) * renderScale);
+    const thermalSize = getThermalBufferSize(width, height);
+
+    renderer.setPixelRatio(effectivePixelRatio);
+    renderer.setSize(width, height);
+
+    if (typeof ThermalSystem !== 'undefined' && ThermalSystem.resize) {
+      ThermalSystem.resize(thermalSize.width, thermalSize.height);
+    }
+  }
+
   // ---- Init ----
 
   async function init() {
@@ -96,9 +139,8 @@ const Game = (() => {
     await tick();
 
     const canvas = document.getElementById('gameCanvas');
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+    applyQualitySettings();
     renderer.shadowMap.enabled = false;
 
     setLoadStatus('Building scene...', 25);
@@ -129,7 +171,8 @@ const Game = (() => {
     setLoadStatus('Initializing systems...', 70);
     await tick();
 
-    ThermalSystem.init(renderer, window.innerWidth, window.innerHeight);
+    const thermalSize = getThermalBufferSize();
+    ThermalSystem.init(renderer, thermalSize.width, thermalSize.height);
     EffectsSystem.init(mainScene, mainCamera);
     HUDSystem.init();
     AudioSystem.init();
@@ -173,10 +216,15 @@ const Game = (() => {
       () => { returnToMissionEditor(); }
     );
 
+    applyQualitySettings();
+    TerrainSystem.refreshBuildingVisuals();
+    buildings = TerrainSystem.getBuildings();
+
     // Game over restart and back-to-menu
 
     if (MenuSystem.onQualityChange) {
       MenuSystem.onQualityChange(() => {
+        applyQualitySettings();
         TerrainSystem.refreshBuildingVisuals();
         buildings = TerrainSystem.getBuildings();
       });
@@ -1369,7 +1417,8 @@ const Game = (() => {
 
   function render() {
     const zoomT = Utils.clamp((zoomFactor - 0.9) / (ZOOM_MAX - 1.02), 0, 1);
-    const tiltShiftStrength = zoomT * 1.35;
+    const qualityProfile = getActiveQualityProfile();
+    const tiltShiftStrength = zoomT * 1.35 * (qualityProfile.tiltShiftMultiplier !== undefined ? qualityProfile.tiltShiftMultiplier : 1);
     ThermalSystem.render(renderer, mainScene, mainCamera, time, tiltShiftStrength);
   }
 
@@ -1502,8 +1551,7 @@ const Game = (() => {
     window.addEventListener('resize', () => {
       const w = window.innerWidth;
       const h = window.innerHeight;
-      renderer.setSize(w, h);
-      ThermalSystem.resize(w, h);
+      applyQualitySettings();
       mainCamera.aspect = w / h;
       mainCamera.updateProjectionMatrix();
     });

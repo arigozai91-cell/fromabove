@@ -6,10 +6,31 @@
 const MenuSystem = (() => {
 
   // ---- Quality setting ----
-  // 'low' = 25% particles, 'medium' = 50%, 'high' = 100%
   let quality = 'high';
   const qualityListeners = [];
-  const QUALITY_MULTIPLIERS = { low: 0.25, medium: 0.5, high: 1.0 };
+  const QUALITY_PROFILES = {
+    low: {
+      particleMultiplier: 0.25,
+      renderScale: 0.55,
+      maxPixelRatio: 1.0,
+      thermalScale: 0.50,
+      tiltShiftMultiplier: 0.0
+    },
+    medium: {
+      particleMultiplier: 0.5,
+      renderScale: 0.75,
+      maxPixelRatio: 1.25,
+      thermalScale: 0.75,
+      tiltShiftMultiplier: 0.4
+    },
+    high: {
+      particleMultiplier: 1.0,
+      renderScale: 1.0,
+      maxPixelRatio: 1.5,
+      thermalScale: 1.0,
+      tiltShiftMultiplier: 1.0
+    }
+  };
   let _canResume = false;
   let _canReturnToEditor = false;
   let _onEndMission = null;
@@ -21,8 +42,12 @@ const MenuSystem = (() => {
   let _mobileOnFireEnd = null;
   let _mobileOnWeaponSelect = null;
 
+  function getQualityProfile() {
+    return QUALITY_PROFILES[quality] || QUALITY_PROFILES.high;
+  }
+
   function getParticleMultiplier() {
-    return QUALITY_MULTIPLIERS[quality] || 1.0;
+    return getQualityProfile().particleMultiplier;
   }
 
   function getQuality() { return quality; }
@@ -37,7 +62,7 @@ const MenuSystem = (() => {
   }
 
   function setQuality(q) {
-    if (QUALITY_MULTIPLIERS[q] === undefined || q === quality) return;
+    if (QUALITY_PROFILES[q] === undefined || q === quality) return;
     quality = q;
     try { localStorage.setItem('ac130_quality', q); } catch(_) {}
     document.querySelectorAll('.quality-btn').forEach(btn => {
@@ -496,7 +521,7 @@ const MenuSystem = (() => {
     // Restore saved quality
     try {
       const saved = localStorage.getItem('ac130_quality');
-      if (saved && QUALITY_MULTIPLIERS[saved] !== undefined) quality = saved;
+      if (saved && QUALITY_PROFILES[saved] !== undefined) quality = saved;
     } catch(_) {}
 
     // Apply saved quality to buttons
@@ -646,6 +671,7 @@ const MenuSystem = (() => {
     setResumable,
     setEditorReturnable,
     getQuality,
+    getQualityProfile,
     onQualityChange,
     getParticleMultiplier,
     initMobileControls,
