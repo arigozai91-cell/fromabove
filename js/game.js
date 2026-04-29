@@ -69,6 +69,8 @@ const Game = (() => {
   let keyboardFireHeld = false;
   let heading   = 270;
   let lastTouchInputAt = 0;
+  let pinchZoomActive = false;
+  let pinchZoomLastDistance = 0;
 
   // Targeting
   let lockedTarget = null;
@@ -1439,6 +1441,15 @@ const Game = (() => {
     mouseDown = false;
     fireHeld = false;
     keyboardFireHeld = false;
+    pinchZoomActive = false;
+    pinchZoomLastDistance = 0;
+  }
+
+  function getTouchDistance(touches) {
+    if (!touches || touches.length < 2) return 0;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
   }
 
   function isCoarsePointerDevice() {
@@ -1459,6 +1470,58 @@ const Game = (() => {
     crosshairEl = document.getElementById('crosshair');
     ['touchstart', 'touchmove', 'touchend', 'touchcancel'].forEach(type => {
       window.addEventListener(type, noteTouchInput, { passive: true, capture: true });
+    });
+
+    window.addEventListener('touchstart', e => {
+      if (!running || paused || !document.body.classList.contains('game-active')) return;
+      if (document.body.classList.contains('menu-open')) return;
+      if (isGameplayPointerBlocked(e.target)) return;
+      if (e.touches.length < 2) return;
+
+      pinchZoomActive = true;
+      pinchZoomLastDistance = getTouchDistance(e.touches);
+      e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('touchmove', e => {
+      if (!pinchZoomActive) return;
+      if (!running || paused || !document.body.classList.contains('game-active')) {
+        pinchZoomActive = false;
+        pinchZoomLastDistance = 0;
+        return;
+      }
+      if (document.body.classList.contains('menu-open')) {
+        pinchZoomActive = false;
+        pinchZoomLastDistance = 0;
+        return;
+      }
+      if (e.touches.length < 2) {
+        pinchZoomActive = false;
+        pinchZoomLastDistance = 0;
+        return;
+      }
+
+      const nextDistance = getTouchDistance(e.touches);
+      if (pinchZoomLastDistance > 0 && nextDistance > 0) {
+        const delta = nextDistance - pinchZoomLastDistance;
+        if (Math.abs(delta) > 0.75) {
+          setZoomFactor(zoomFactor + delta * 0.003);
+        }
+      }
+      pinchZoomLastDistance = nextDistance;
+      e.preventDefault();
+    }, { passive: false });
+
+    ['touchend', 'touchcancel'].forEach(type => {
+      window.addEventListener(type, e => {
+        if (e.touches.length >= 2) {
+          pinchZoomLastDistance = getTouchDistance(e.touches);
+          pinchZoomActive = pinchZoomLastDistance > 0;
+          return;
+        }
+        pinchZoomActive = false;
+        pinchZoomLastDistance = 0;
+      }, { passive: true });
     });
 
     // Mouse move -> NDC + crosshair follow
