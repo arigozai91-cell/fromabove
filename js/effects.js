@@ -18,7 +18,15 @@ const EffectsSystem = (() => {
   let shakeIntensity = 0;
   let shakeDuration = 0;
   let _camera = null;
+  let _lastMinigunImpactFxAt = 0;
   // (distortionWaves removed — shockwaves are world-space ground rings)
+
+  function nowMs() {
+    if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
+      return performance.now();
+    }
+    return Date.now();
+  }
 
   function finalizeCanvasTexture(texture) {
     texture.premultiplyAlpha = true;
@@ -1547,6 +1555,7 @@ function getRadialSpreadProgress(t) {
     smokeTrails = [];
     shakeIntensity = 0;
     shakeDuration  = 0;
+    _lastMinigunImpactFxAt = 0;
   }
 
   // Light-weight explosion: fireball flash + glow + light pool + shockwave only.
@@ -1592,7 +1601,28 @@ function getRadialSpreadProgress(t) {
   function spawnMinigunImpactExplosion(x, y, z, impactDirection = null) {
     const visualSize = 0.28;
     const quality = (typeof MenuSystem !== 'undefined' && MenuSystem.getQuality) ? MenuSystem.getQuality() : 'high';
-    const maxSparkCount = quality === 'low' ? 1 : quality === 'medium' ? 2 : 3;
+    const now = nowMs();
+    const fullEffectInterval = quality === 'low' ? 90 : quality === 'medium' ? 65 : 45;
+    const flashInterval = quality === 'low' ? 30 : quality === 'medium' ? 24 : 18;
+    const elapsedSinceLastFx = now - _lastMinigunImpactFxAt;
+
+    if (elapsedSinceLastFx < flashInterval) {
+      return;
+    }
+
+    _lastMinigunImpactFxAt = now;
+
+    if (elapsedSinceLastFx < fullEffectInterval) {
+      spawnSurfaceFlash(x, z, visualSize, {
+        peakOpacity: 0.2,
+        maxAge: 0.08,
+        glowOpacity: 0,
+        segments: 8
+      });
+      return;
+    }
+
+    const maxSparkCount = quality === 'low' ? 0 : quality === 'medium' ? 1 : 2;
 
     const fbMat = new THREE.SpriteMaterial({
       map: getSmokeAlphaTex(),
@@ -1750,8 +1780,12 @@ function getRadialSpreadProgress(t) {
       maxOpacity: 0.62
     });
 
-    spawnSmoke(x, y, z, 1.25, SMOKE_PROFILES.minigunImpact);
-    spawnShockwave(x, y, z, 0.22);
+    if (quality !== 'low') {
+      spawnSmoke(x, y, z, quality === 'medium' ? 0.8 : 1.25, SMOKE_PROFILES.minigunImpact);
+    }
+    if (quality === 'high') {
+      spawnShockwave(x, y, z, 0.22);
+    }
     AudioSystem.playExplosion(visualSize * 0.4);
 
     triggerShake(visualSize * 0.08, 0.04);

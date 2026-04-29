@@ -4,6 +4,8 @@
 'use strict';
 
 const MenuSystem = (() => {
+  const MENU_SCREEN_IDS = ['main-menu', 'missions-screen', 'loadout-screen', 'settings-screen', 'controls-screen', 'unit-editor-screen'];
+  const VIBEJAM_WIDGET_SRC = 'https://vibej.am/2026/widget.js';
 
   // ---- Quality setting ----
   let quality = 'high';
@@ -83,11 +85,93 @@ const MenuSystem = (() => {
   let _mobileOnFireStart = null;
   let _mobileOnFireEnd = null;
   let _mobileOnWeaponSelect = null;
+  let _widgetLoadHandle = null;
+  let _widgetLoadMode = null;
+  let _widgetScriptLoaded = false;
+  let _widgetObserver = null;
+  const _widgetNodes = new Set();
 
   function isCoarsePointerDevice() {
     return typeof window !== 'undefined'
       && typeof window.matchMedia === 'function'
       && window.matchMedia('(pointer: coarse)').matches;
+  }
+
+  function isMenuVisible() {
+    return typeof document !== 'undefined' && document.body.classList.contains('menu-open');
+  }
+
+  function updateWidgetVisibility(visible) {
+    _widgetNodes.forEach(node => {
+      if (!(node instanceof HTMLElement) || !node.isConnected) return;
+      node.hidden = !visible;
+    });
+  }
+
+  function ensureWidgetObserver() {
+    if (_widgetObserver || typeof MutationObserver === 'undefined' || typeof document === 'undefined') return;
+
+    _widgetObserver = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (!(node instanceof HTMLElement)) return;
+          if (node.parentElement !== document.body) return;
+          if (node.id === 'vibejam-widget-script') return;
+          _widgetNodes.add(node);
+          node.dataset.vibejamOwned = 'true';
+          node.hidden = !isMenuVisible();
+        });
+      });
+    });
+
+    _widgetObserver.observe(document.body, { childList: true });
+  }
+
+  function clearWidgetLoadHandle() {
+    if (_widgetLoadHandle === null) return;
+    if (_widgetLoadMode === 'idle' && typeof window.cancelIdleCallback === 'function') {
+      window.cancelIdleCallback(_widgetLoadHandle);
+    } else {
+      clearTimeout(_widgetLoadHandle);
+    }
+    _widgetLoadHandle = null;
+    _widgetLoadMode = null;
+  }
+
+  function loadWidget() {
+    clearWidgetLoadHandle();
+    if (_widgetScriptLoaded || !isMenuVisible() || typeof document === 'undefined') return;
+    if (document.getElementById('vibejam-widget-script')) return;
+
+    ensureWidgetObserver();
+
+    const script = document.createElement('script');
+    script.id = 'vibejam-widget-script';
+    script.async = true;
+    script.src = VIBEJAM_WIDGET_SRC;
+    script.onload = () => {
+      _widgetScriptLoaded = true;
+      updateWidgetVisibility(true);
+    };
+    script.onerror = () => {
+      const existing = document.getElementById('vibejam-widget-script');
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+    };
+    document.body.appendChild(script);
+  }
+
+  function scheduleWidgetLoad() {
+    if (_widgetScriptLoaded || _widgetLoadHandle !== null || !isMenuVisible()) return;
+
+    const runLoad = () => loadWidget();
+    if (typeof window !== 'undefined' && typeof window.requestIdleCallback === 'function') {
+      _widgetLoadMode = 'idle';
+      _widgetLoadHandle = window.requestIdleCallback(runLoad, { timeout: 4000 });
+      return;
+    }
+
+    _widgetLoadMode = 'timeout';
+    _widgetLoadHandle = window.setTimeout(runLoad, 2500);
   }
 
   function getRecommendedInitialQuality() {
@@ -292,12 +376,13 @@ const MenuSystem = (() => {
 
   function showScreen(id) {
     if (id === 'loadout-screen' && _canResume) id = 'main-menu';
-    const ids = ['main-menu', 'missions-screen', 'loadout-screen', 'settings-screen', 'controls-screen', 'unit-editor-screen'];
-    ids.forEach(sid => {
+    MENU_SCREEN_IDS.forEach(sid => {
       const el = document.getElementById(sid);
       if (el) el.style.display = sid === id ? 'flex' : 'none';
     });
     document.body.classList.add('menu-open');
+    updateWidgetVisibility(true);
+    scheduleWidgetLoad();
     if (typeof AudioSystem !== 'undefined' && AudioSystem.enableMenuMusic) {
       AudioSystem.enableMenuMusic();
     }
@@ -308,11 +393,13 @@ const MenuSystem = (() => {
   }
 
   function hideAllMenus() {
-    ['main-menu', 'missions-screen', 'loadout-screen', 'settings-screen', 'controls-screen', 'unit-editor-screen'].forEach(id => {
+    MENU_SCREEN_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
     document.body.classList.remove('menu-open');
+    clearWidgetLoadHandle();
+    updateWidgetVisibility(false);
     if (typeof AudioSystem !== 'undefined' && AudioSystem.disableMenuMusic) {
       AudioSystem.disableMenuMusic();
     }
