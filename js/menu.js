@@ -175,15 +175,7 @@ const MenuSystem = (() => {
   }
 
   function getRecommendedInitialQuality() {
-    const width = typeof window !== 'undefined' ? window.innerWidth || 0 : 0;
-    const height = typeof window !== 'undefined' ? window.innerHeight || 0 : 0;
-    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
-
-    if (isCoarsePointerDevice()) {
-      return dpr > 1 || (width * height) > 700000 ? 'low' : 'medium';
-    }
-
-    return dpr > 1 || (width * height) > 1200000 ? 'medium' : 'high';
+    return 'high';
   }
 
   function ensureQualityLoaded() {
