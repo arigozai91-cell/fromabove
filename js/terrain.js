@@ -296,11 +296,11 @@ const heat = Utils.clamp(baseHeat + noise, 0.07, 0.105);
   }
 
   function getRockCount() {
-    if (typeof MenuSystem === 'undefined' || !MenuSystem.getQuality) return 16;
-    const quality = MenuSystem.getQuality();
-    if (quality === 'low') return 8;
-    if (quality === 'medium') return 12;
-    return 18;
+    if (typeof MenuSystem !== 'undefined' && MenuSystem.getQualityProfile) {
+      const profile = MenuSystem.getQualityProfile();
+      if (profile && profile.rockCount !== undefined) return profile.rockCount;
+    }
+    return 16;
   }
 
   function canPlaceRock(x, z, radius, placedRocks) {
@@ -371,11 +371,19 @@ const heat = Utils.clamp(baseHeat + noise, 0.07, 0.105);
   }
 
   function getWindowQualityMultiplier() {
-    if (typeof MenuSystem === 'undefined' || !MenuSystem.getQuality) return 1.0;
-    const quality = MenuSystem.getQuality();
-    if (quality === 'low') return 0.45;
-    if (quality === 'medium') return 0.7;
+    if (typeof MenuSystem !== 'undefined' && MenuSystem.getQualityProfile) {
+      const profile = MenuSystem.getQualityProfile();
+      if (profile && profile.windowMultiplier !== undefined) return profile.windowMultiplier;
+    }
     return 1.0;
+  }
+
+  function getVegetationCount() {
+    if (typeof MenuSystem !== 'undefined' && MenuSystem.getQualityProfile) {
+      const profile = MenuSystem.getQualityProfile();
+      if (profile && profile.vegetationCount !== undefined) return profile.vegetationCount;
+    }
+    return 80;
   }
 
   function createBuildingBoxGeometry(w, h, d) {
@@ -592,7 +600,8 @@ const heat = Utils.clamp(baseHeat + noise, 0.07, 0.105);
   function buildEnvironmentDetails(sceneRef) {
     // Trees / shrubs as heat cold objects
     scene = scene || sceneRef;
-    for (let i = 0; i < 80; i++) {
+    const vegetationCount = getVegetationCount();
+    for (let i = 0; i < vegetationCount; i++) {
       const pos = Utils.randomSpawnPos(180, 10);
       const groundY = getHeightAt(pos.x, pos.z);
       const h = Utils.randFloat(4, 10);
@@ -661,7 +670,8 @@ const heat = Utils.clamp(baseHeat + noise, 0.07, 0.105);
   }
 
   function _addDefaultTrees() {
-    for (let i = 0; i < 80; i++) {
+    const vegetationCount = getVegetationCount();
+    for (let i = 0; i < vegetationCount; i++) {
       const pos = Utils.randomSpawnPos(180, 10);
       const gy  = getHeightAt(pos.x, pos.z);
       const h   = Utils.randFloat(4, 10);

@@ -61,6 +61,10 @@ html, body {
   cursor: default;
 }
 
+body.menu-open #mobile-controls {
+  display: none !important;
+}
+
 body.game-active,
 body.game-active * {
   cursor: none !important;
@@ -1576,6 +1580,7 @@ body:not(.game-active) #speaker-portrait {
   padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -1937,6 +1942,7 @@ body:not(.game-active) #speaker-portrait {
   padding: max(18px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -2010,7 +2016,7 @@ body:not(.game-active) #speaker-portrait {
   width: min(980px, 96vw);
   max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
 }
 
 #missions-list {
@@ -2197,7 +2203,7 @@ body:not(.game-active) #speaker-portrait {
   width: min(1180px, 96vw);
   max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
   position: relative;
 }
 
@@ -2508,7 +2514,7 @@ body:not(.game-active) #speaker-portrait {
   width: min(520px, 94vw);
   max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
 }
 
 .volume-row {
@@ -2646,7 +2652,7 @@ body:not(.game-active) #speaker-portrait {
   width: min(560px, 94vw);
   max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 36px);
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
 }
 
 .controls-section {
@@ -4641,6 +4647,16 @@ body.editor-active #vignette {
     justify-content: center;
     padding-top: max(12px, env(safe-area-inset-top));
     padding-bottom: max(12px, env(safe-area-inset-bottom));
+    touch-action: pan-y;
+  }
+
+  #menu-content,
+  #missions-content,
+  #loadout-content,
+  #settings-content,
+  #controls-content,
+  #unit-editor-content {
+    touch-action: pan-y;
   }
 
   /* Show mobile controls when game is running on touch device */
@@ -4691,7 +4707,10 @@ body.editor-active #vignette {
   #unit-editor-content {
     width: 100%;
     max-width: 100%;
-    max-height: none;
+    max-height: calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
     padding: 20px 16px;
   }
 

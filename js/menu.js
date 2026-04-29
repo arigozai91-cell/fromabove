@@ -14,21 +14,62 @@ const MenuSystem = (() => {
       renderScale: 0.55,
       maxPixelRatio: 1.0,
       thermalScale: 0.50,
-      tiltShiftMultiplier: 0.0
+      tiltShiftMultiplier: 0.0,
+      windowMultiplier: 0.45,
+      rockCount: 8,
+      vegetationCount: 56
     },
     medium: {
       particleMultiplier: 0.5,
       renderScale: 0.75,
       maxPixelRatio: 1.25,
       thermalScale: 0.75,
-      tiltShiftMultiplier: 0.4
+      tiltShiftMultiplier: 0.4,
+      windowMultiplier: 0.7,
+      rockCount: 12,
+      vegetationCount: 70
     },
     high: {
       particleMultiplier: 1.0,
       renderScale: 1.0,
       maxPixelRatio: 1.5,
       thermalScale: 1.0,
-      tiltShiftMultiplier: 1.0
+      tiltShiftMultiplier: 1.0,
+      windowMultiplier: 1.0,
+      rockCount: 18,
+      vegetationCount: 80
+    }
+  };
+  const MOBILE_QUALITY_OVERRIDES = {
+    low: {
+      particleMultiplier: 0.16,
+      renderScale: 0.38,
+      maxPixelRatio: 0.85,
+      thermalScale: 0.28,
+      tiltShiftMultiplier: 0.0,
+      windowMultiplier: 0.22,
+      rockCount: 4,
+      vegetationCount: 26
+    },
+    medium: {
+      particleMultiplier: 0.3,
+      renderScale: 0.52,
+      maxPixelRatio: 1.0,
+      thermalScale: 0.4,
+      tiltShiftMultiplier: 0.12,
+      windowMultiplier: 0.38,
+      rockCount: 7,
+      vegetationCount: 38
+    },
+    high: {
+      particleMultiplier: 0.65,
+      renderScale: 0.68,
+      maxPixelRatio: 1.15,
+      thermalScale: 0.56,
+      tiltShiftMultiplier: 0.4,
+      windowMultiplier: 0.62,
+      rockCount: 10,
+      vegetationCount: 50
     }
   };
   let _canResume = false;
@@ -42,8 +83,17 @@ const MenuSystem = (() => {
   let _mobileOnFireEnd = null;
   let _mobileOnWeaponSelect = null;
 
+  function isCoarsePointerDevice() {
+    return typeof window !== 'undefined'
+      && typeof window.matchMedia === 'function'
+      && window.matchMedia('(pointer: coarse)').matches;
+  }
+
   function getQualityProfile() {
-    return QUALITY_PROFILES[quality] || QUALITY_PROFILES.high;
+    const baseProfile = QUALITY_PROFILES[quality] || QUALITY_PROFILES.high;
+    if (!isCoarsePointerDevice()) return baseProfile;
+    const mobileOverride = MOBILE_QUALITY_OVERRIDES[quality];
+    return mobileOverride ? { ...baseProfile, ...mobileOverride } : baseProfile;
   }
 
   function getParticleMultiplier() {
@@ -213,6 +263,7 @@ const MenuSystem = (() => {
       const el = document.getElementById(sid);
       if (el) el.style.display = sid === id ? 'flex' : 'none';
     });
+    document.body.classList.add('menu-open');
     if (typeof AudioSystem !== 'undefined' && AudioSystem.enableMenuMusic) {
       AudioSystem.enableMenuMusic();
     }
@@ -227,6 +278,7 @@ const MenuSystem = (() => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
+    document.body.classList.remove('menu-open');
     if (typeof AudioSystem !== 'undefined' && AudioSystem.disableMenuMusic) {
       AudioSystem.disableMenuMusic();
     }
