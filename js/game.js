@@ -1130,7 +1130,19 @@ const Game = (() => {
 
     // Impact splash for small hits
     if (aoe === 0) {
-      if (weapon.id !== 1) EffectsSystem.spawnImpact(x, groundY, z, 1.0);
+      if (weapon.id === 1) {
+        const quality = MenuSystem.getQuality ? MenuSystem.getQuality() : 'high';
+        const maxImpactParticles = quality === 'low' ? 1 : quality === 'medium' ? 2 : 3;
+        EffectsSystem.spawnImpact(x, groundY, z, {
+          particleScale: 1.0,
+          maxDustCount: maxImpactParticles,
+          maxSparkCount: maxImpactParticles,
+          dustVelocityScale: 2.0,
+          sparkSpeedScale: 2.4
+        });
+      } else {
+        EffectsSystem.spawnImpact(x, groundY, z, 1.0);
+      }
     }
   }
 
