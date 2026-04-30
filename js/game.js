@@ -233,6 +233,14 @@ const Game = (() => {
     }
     const restartBtn = document.getElementById('restart-btn');
     if (restartBtn) restartBtn.addEventListener('click', restartGame);
+    const gameoverLoadoutBtn = document.getElementById('gameover-loadout-btn');
+    if (gameoverLoadoutBtn) {
+      gameoverLoadoutBtn.addEventListener('click', () => {
+        endCurrentMission('loadout-screen', {
+          loadoutStatus: 'Spend your prestige here to buy weapons, then assign them to your active slots.'
+        });
+      });
+    }
 
     MenuSystem.addBackToMenuButton(() => {
       // Clean up running game
@@ -409,6 +417,11 @@ const Game = (() => {
   }
 
   function endCurrentMission() {
+    let targetScreen = 'main-menu';
+    let options = {};
+    if (arguments.length > 0) targetScreen = arguments[0] || 'main-menu';
+    if (arguments.length > 1 && arguments[1]) options = arguments[1];
+
     HUDSystem.hideGameOver();
     _fullSessionReset();
     _currentRunFromEditor = false;
@@ -417,7 +430,11 @@ const Game = (() => {
     if (ambientStopFn) { ambientStopFn(); ambientStopFn = null; }
     MenuSystem.setResumable(false);
     MenuSystem.setEditorReturnable(false);
-    MenuSystem.showScreen('main-menu');
+    if (targetScreen === 'loadout-screen' && MenuSystem.openLoadoutScreen) {
+      MenuSystem.openLoadoutScreen(options.loadoutStatus || '');
+      return;
+    }
+    MenuSystem.showScreen(targetScreen);
   }
 
   function setZoomFactor(nextZoom, options = {}) {

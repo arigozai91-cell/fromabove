@@ -117,6 +117,7 @@ const MissionSystem = (() => {
     nextRadioTime  = time + 3 + Utils.randFloat(18, 35);
     reinforcementTimer = 30;
     HUDSystem.updateObjective(currentMission.objective);
+    if (HUDSystem.showMissionObjective) HUDSystem.showMissionObjective(currentMission.objective);
     HUDSystem.updateScore(score, kills);
     // Reset zombie wave state
     _zombieWaveIndex = 0;

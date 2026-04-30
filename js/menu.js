@@ -249,6 +249,14 @@ const MenuSystem = (() => {
     }
   }
 
+  function openLoadoutScreen(statusText = '') {
+    if (_canResume) return false;
+    _loadoutSelectedSlot = 1;
+    showScreen('loadout-screen');
+    if (statusText) setLoadoutStatus(statusText);
+    return true;
+  }
+
   function refreshMobileWeaponBar() {
     document.querySelectorAll('.mob-weapon-btn').forEach((btn, index) => {
       const slot = index + 1;
@@ -702,8 +710,7 @@ const MenuSystem = (() => {
     if (btnPlay)     btnPlay.addEventListener('click',     () => showScreen('missions-screen'));
     if (btnLoadout)  btnLoadout.addEventListener('click',  () => {
       if (_canResume) return;
-      _loadoutSelectedSlot = 1;
-      showScreen('loadout-screen');
+      openLoadoutScreen();
     });
     if (btnSettings) btnSettings.addEventListener('click', () => showScreen('settings-screen'));
     if (btnControls) btnControls.addEventListener('click', () => showScreen('controls-screen'));
@@ -813,6 +820,7 @@ const MenuSystem = (() => {
   // Add "BACK TO MENU" button to game over screen
   function addBackToMenuButton(onBack) {
     const content = document.getElementById('gameover-content');
+    const actions = document.getElementById('gameover-actions');
     if (!content || document.getElementById('back-to-menu-btn')) return;
     const btn = document.createElement('button');
     btn.id = 'back-to-menu-btn';
@@ -822,7 +830,7 @@ const MenuSystem = (() => {
       showScreen('main-menu');
       if (onBack) onBack();
     });
-    content.appendChild(btn);
+    (actions || content).appendChild(btn);
   }
 
   return {
@@ -840,6 +848,7 @@ const MenuSystem = (() => {
     syncMobileWeapon,
     updateMobileWeaponButtons,
     addBackToMenuButton,
+    openLoadoutScreen,
     unlockMission,
   };
 })();

@@ -366,6 +366,7 @@ const BaseDefenceSystem = (() => {
 
     HUDSystem.showRadio('BASE DEFENCE MISSION LOADED — FORTIFY THE PERIMETER.');
     HUDSystem.updateObjective('PROTECT HQ — BUILD YOUR DEFENCES');
+    if (HUDSystem.showMissionObjective) HUDSystem.showMissionObjective('PROTECT HQ — BUILD YOUR DEFENCES');
     setTimeout(() => HUDSystem.showRadio(`ROUND 1 BEGINS IN ${BUILD_DURATION} SECONDS. DEPLOY UNITS NOW.`), 3000);
   }
 

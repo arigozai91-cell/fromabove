@@ -1182,7 +1182,7 @@ body.mission-booting #mission-boot-overlay {
   text-transform: uppercase;
 }
 
-#start-btn, #restart-btn {
+#start-btn, #restart-btn, #gameover-loadout-btn, #back-to-menu-btn {
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.25em;
@@ -1199,7 +1199,7 @@ body.mission-booting #mission-boot-overlay {
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 8px 50%);
 }
 
-#start-btn:hover, #restart-btn:hover {
+#start-btn:hover, #restart-btn:hover, #gameover-loadout-btn:hover, #back-to-menu-btn:hover {
   transform: translateX(3px);
   filter: brightness(1.06);
   border-color: rgba(255,255,255,0.48);
@@ -1261,6 +1261,25 @@ body.mission-booting #mission-boot-overlay {
   color: rgba(225,217,202,0.62);
   line-height: 1.8;
   text-align: left;
+}
+
+#gameover-tip {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  line-height: 1.7;
+  color: rgba(246,238,220,0.72);
+  text-transform: uppercase;
+}
+
+#gameover-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+#gameover-actions > button {
+  flex: 1 1 176px;
 }
 
 /* ==============================
@@ -1415,6 +1434,212 @@ body.mission-booting #mission-boot-overlay {
 #radio-popup::before {
   content: '► ';
   color: rgba(255,255,255,0.5);
+}
+
+#mission-objective-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(720px, calc(100vw - 40px));
+  padding: 20px 24px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  text-align: center;
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04) 18%, rgba(255,255,255,0.015) 32%, rgba(0,0,0,0.82) 100%),
+    linear-gradient(90deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 18%, rgba(255,255,255,0) 82%, rgba(255,255,255,0.08));
+  border: 1px solid rgba(255,255,255,0.26);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.86), 0 0 26px rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  z-index: 21;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+  filter: blur(0px) brightness(1) contrast(1);
+  transform: translate3d(-50%, calc(-50% + 14px), 0) scale(0.975);
+  transition: opacity 0.18s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+body:not(.game-active) #mission-objective-popup {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+#mission-objective-popup.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(-50%, -50%, 0) scale(1);
+}
+
+#mission-objective-popup::before,
+#mission-objective-popup::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#mission-objective-popup::before {
+  z-index: 2;
+  opacity: 0;
+  filter: brightness(1.05);
+  background-image:
+    radial-gradient(circle at center,
+      rgba(255,255,255,0) 0 10%,
+      rgba(255,255,255,1) 13%,
+      rgba(255,255,255,1) 20%,
+      rgba(255,255,255,0.44) 29%,
+      rgba(255,255,255,0) 39%),
+    linear-gradient(rgba(255,255,255,1), rgba(255,255,255,1));
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-size: 14% 14%, 100% 100%;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0 0.55px, transparent 0.9px);
+  mask-image: radial-gradient(circle at 50% 50%, #000 0 0.55px, transparent 0.9px);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 4px 4px;
+  mask-size: 4px 4px;
+}
+
+#mission-objective-popup::after {
+  z-index: 3;
+  opacity: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,1)),
+    linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.94)),
+    linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.86)),
+    linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0.78));
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-position: 0 16%, 0 34%, 0 57%, 0 78%;
+  background-size: 0 1px, 0 1px, 0 1px, 0 1px;
+}
+
+#mission-objective-popup.glitch-pre {
+  filter: blur(1.1px) brightness(1.38) contrast(1.16);
+}
+
+#mission-objective-popup.glitch-pre::before {
+  opacity: 0.04;
+  animation: speaker-portrait-preflash 0.22s linear both;
+}
+
+#mission-objective-popup.glitch-pre::after {
+  animation: button-hover-glitch 0.2s ease-out both;
+}
+
+#mission-objective-popup.glitch-out {
+  filter: blur(0.9px) brightness(1.22) contrast(1.1);
+}
+
+#mission-objective-popup.glitch-out::before {
+  opacity: 0.08;
+  animation: button-hover-inverse-glow 0.18s ease-out both;
+}
+
+#mission-objective-popup.glitch-out::after {
+  animation: button-hover-glitch 0.2s ease-out both;
+}
+
+.mission-objective-popup-kicker,
+.mission-objective-popup-text {
+  position: relative;
+  z-index: 1;
+}
+
+.mission-objective-popup-kicker {
+  font-size: 11px;
+  letter-spacing: 0.38em;
+  color: rgba(255,255,255,0.58);
+}
+
+.mission-objective-popup-text {
+  max-width: 100%;
+  font-size: clamp(18px, 2.3vw, 30px);
+  line-height: 1.28;
+  letter-spacing: 0.12em;
+  text-wrap: balance;
+}
+
+@keyframes mission-objective-popup-distort-in {
+  0% {
+    opacity: 0.04;
+    transform: translate3d(-20px, -5px, 0) skewX(-8deg);
+    filter: brightness(1.3);
+  }
+
+  42% {
+    opacity: 0.26;
+    transform: translate3d(18px, 4px, 0) skewX(10deg);
+    filter: brightness(2.3);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) skewX(0deg);
+    filter: brightness(1);
+  }
+}
+
+@keyframes mission-objective-popup-distort-out {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) skewX(0deg);
+    filter: brightness(1);
+  }
+
+  38% {
+    opacity: 0.18;
+    transform: translate3d(-14px, 2px, 0) skewX(-8deg);
+    filter: brightness(1.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(22px, -3px, 0) skewX(9deg);
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes mission-objective-popup-lines-in {
+  0% {
+    opacity: 0;
+    background-size: 0 1px, 0 1px, 0 1px;
+  }
+
+  36% {
+    opacity: 1;
+    background-size: 120% 1px, 78% 1px, 106% 1px;
+  }
+
+  100% {
+    opacity: 0;
+    background-size: 20% 1px, 12% 1px, 24% 1px;
+  }
+}
+
+@keyframes mission-objective-popup-lines-out {
+  0% {
+    opacity: 0;
+    background-size: 16% 1px, 10% 1px, 20% 1px;
+  }
+
+  34% {
+    opacity: 1;
+    background-size: 108% 1px, 74% 1px, 96% 1px;
+  }
+
+  100% {
+    opacity: 0;
+    background-size: 0 1px, 0 1px, 0 1px;
+  }
 }
 
 #speaker-portrait {
@@ -4268,6 +4493,7 @@ body.editor-active canvas {
 
 #start-btn,
 #restart-btn,
+#gameover-loadout-btn,
 #back-to-menu-btn,
 .menu-btn,
 .back-btn,
@@ -4301,6 +4527,7 @@ body.editor-active canvas {
 
 #start-btn:hover,
 #restart-btn:hover,
+#gameover-loadout-btn:hover,
 #back-to-menu-btn:hover,
 .menu-btn:hover,
 .menu-btn:active,

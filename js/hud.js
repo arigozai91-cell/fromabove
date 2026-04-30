@@ -9,6 +9,11 @@ const HUDSystem = (() => {
   let killFeedEl = null;
   let radioPopupEl = null;
   let radioTimeout = null;
+  let missionObjectivePopupEl = null;
+  let missionObjectivePopupTextEl = null;
+  let missionObjectivePopupIntroTimer = null;
+  let missionObjectivePopupOutroTimer = null;
+  let missionObjectivePopupHideTimer = null;
   let speakerPortraitEl = null;
   let speakerPortraitImageEl = null;
   let speakerPortraitGlitchTimer = null;
@@ -55,6 +60,25 @@ const HUDSystem = (() => {
       radioPopupEl = document.createElement('div');
       radioPopupEl.id = 'radio-popup';
       document.body.appendChild(radioPopupEl);
+    }
+
+    missionObjectivePopupEl = document.getElementById('mission-objective-popup');
+    if (!missionObjectivePopupEl) {
+      missionObjectivePopupEl = document.createElement('div');
+      missionObjectivePopupEl.id = 'mission-objective-popup';
+
+      const missionObjectivePopupKickerEl = document.createElement('div');
+      missionObjectivePopupKickerEl.className = 'mission-objective-popup-kicker';
+      missionObjectivePopupKickerEl.textContent = 'MISSION OBJECTIVE';
+      missionObjectivePopupEl.appendChild(missionObjectivePopupKickerEl);
+
+      missionObjectivePopupTextEl = document.createElement('div');
+      missionObjectivePopupTextEl.className = 'mission-objective-popup-text';
+      missionObjectivePopupEl.appendChild(missionObjectivePopupTextEl);
+
+      (document.getElementById('hud') || document.body).appendChild(missionObjectivePopupEl);
+    } else {
+      missionObjectivePopupTextEl = missionObjectivePopupEl.querySelector('.mission-objective-popup-text');
     }
 
     speakerPortraitEl = document.getElementById('speaker-portrait');
@@ -311,6 +335,48 @@ const HUDSystem = (() => {
     radioTimeout = setTimeout(() => {
       radioPopupEl.classList.remove('visible');
     }, duration);
+  }
+
+  function clearMissionObjectivePopupTimers() {
+    if (missionObjectivePopupIntroTimer) {
+      clearTimeout(missionObjectivePopupIntroTimer);
+      missionObjectivePopupIntroTimer = null;
+    }
+    if (missionObjectivePopupOutroTimer) {
+      clearTimeout(missionObjectivePopupOutroTimer);
+      missionObjectivePopupOutroTimer = null;
+    }
+    if (missionObjectivePopupHideTimer) {
+      clearTimeout(missionObjectivePopupHideTimer);
+      missionObjectivePopupHideTimer = null;
+    }
+  }
+
+  function showMissionObjective(text, duration = 2600) {
+    if (!missionObjectivePopupEl || !missionObjectivePopupTextEl) return;
+    const objectiveText = String(text || '').trim();
+    if (!objectiveText) return;
+
+    clearMissionObjectivePopupTimers();
+    missionObjectivePopupTextEl.textContent = objectiveText;
+    missionObjectivePopupEl.classList.remove('visible', 'glitch-pre', 'glitch-out');
+    void missionObjectivePopupEl.offsetWidth;
+    missionObjectivePopupEl.classList.add('visible', 'glitch-pre');
+
+    missionObjectivePopupIntroTimer = setTimeout(() => {
+      missionObjectivePopupEl.classList.remove('glitch-pre');
+      missionObjectivePopupIntroTimer = null;
+    }, 220);
+
+    missionObjectivePopupOutroTimer = setTimeout(() => {
+      missionObjectivePopupEl.classList.add('glitch-out');
+      missionObjectivePopupOutroTimer = null;
+    }, 220 + Math.max(0, duration));
+
+    missionObjectivePopupHideTimer = setTimeout(() => {
+      missionObjectivePopupEl.classList.remove('visible', 'glitch-out');
+      missionObjectivePopupHideTimer = null;
+    }, 440 + Math.max(0, duration));
   }
 
   function showSpeakerPortrait(imageSrc) {
@@ -700,7 +766,7 @@ const HUDSystem = (() => {
     updateFps,
     updateScore, updateObjective, updateWeapons, updateCounts,
     setWarning, setFireIndicator,
-    addKillFeed, showRadio, showSpeakerPortrait, hideSpeakerPortrait, spawnDamageFloat,
+    addKillFeed, showRadio, showMissionObjective, showSpeakerPortrait, hideSpeakerPortrait, spawnDamageFloat,
     updateTargetIdentification, clearTargetIdentification,
     updateProjectileGlares, clearProjectileGlares,
     spawnExplosionGlare, updateExplosionGlares, clearExplosionGlares,

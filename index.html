@@ -142,6 +142,7 @@
       <div class="screen-kicker">ARMORY</div>
       <div class="screen-title">LOADOUT</div>
       <div class="screen-copy">Buy new weapon systems with prestige, then assign any owned weapon into your three active mission slots.</div>
+      <div id="loadout-status" aria-live="polite"></div>
 
       <div id="loadout-header-row" class="screen-header-row">
         <div id="loadout-prestige">TOTAL PRESTIGE: 0</div>
@@ -427,7 +428,11 @@
       <div id="gameover-title">MISSION COMPLETE</div>
       <div id="gameover-score"></div>
       <div id="gameover-stats"></div>
-      <button id="restart-btn">CONTINUE</button>
+      <div id="gameover-tip">Spend your prestige in LOADOUT to buy and equip new weapons before the next sortie.</div>
+      <div id="gameover-actions">
+        <button id="restart-btn">CONTINUE</button>
+        <button id="gameover-loadout-btn">LOADOUT</button>
+      </div>
     </div>
   </div>
 
